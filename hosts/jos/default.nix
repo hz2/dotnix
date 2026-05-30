@@ -88,7 +88,7 @@
   # --------------------
   users.users.jos = {
     isNormalUser = true;
-    extraGroups  = [ "wheel" "networkmanager" "video" "audio" "input" ];
+    extraGroups  = [ "wheel" "networkmanager" "video" "audio" "input" "docker" ];
     shell        = pkgs.fish;
   };
 
@@ -130,6 +130,11 @@
   ];
 
   programs.nix-ld.enable = true;
+
+  # --------------------
+  # virtualisation
+  # --------------------
+  virtualisation.docker.enable = true;
 
   # --------------------
   # fonts
