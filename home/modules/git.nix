@@ -3,6 +3,7 @@
 {
   programs.git = {
     enable    = true;
+    package   = pkgs.gitFull; # includes git-send-email and libsecret credential helper
     lfs.enable = true;
 
     settings = {
@@ -50,9 +51,30 @@
         f    = "push --force-with-lease";
         sl   = "stash list";
       };
+
+      credential.helper = "libsecret";
+
+      # lkml patch submission via gmail smtp; password stored in gnome-keyring at runtime
+      sendemail = {
+        smtpServer     = "smtp.gmail.com";
+        smtpServerPort = 587;
+        smtpEncryption = "tls";
+        smtpUser       = "hz2@users.noreply.github.com";
+        from           = "Jason Devers <hz2@users.noreply.github.com>";
+        confirm        = "auto";
+        chainReplyTo   = false;
+        thread         = true;
+        annotate       = true;
+        suppresscc     = "self";
+      };
     };
 
     ignores = [ ".direnv" ".DS_Store" "*.swp" "*.swo" ".envrc" ];
+  };
+
+  services.gnome-keyring = {
+    enable     = true;
+    components = [ "secrets" ];
   };
 
   home.packages = [ pkgs.delta ];

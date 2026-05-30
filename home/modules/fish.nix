@@ -38,6 +38,90 @@
       fzf --fish | source
     '';
 
+    functions.bootstrap = {
+      body = ''
+        argparse 'r/repos=+' 'b/branch=' 'p/path=' -- $argv
+        or return 1
+
+        set -l srcs ~/srcs
+
+        # collect repos from flag or fzf
+        set -l repos
+        if set -q _flag_repos
+          for r in $_flag_repos
+            for part in (string split ',' $r)
+              set -a repos (string trim $part)
+            end
+          end
+        else
+          set repos (ls $srcs 2>/dev/null | fzf --multi \
+            --prompt="repos > " \
+            --header="tab: multi-select  enter: confirm  ctrl-c: cancel" \
+            --preview="ls $srcs/{}" \
+            --preview-window=right:40%)
+          if test -z "$repos"
+            echo "no repos selected"
+            return 1
+          end
+        end
+
+        # branch: flag or prompt
+        set -l branch
+        if set -q _flag_branch
+          set branch $_flag_branch
+        else
+          read -P "branch name: " branch
+          if test -z "$branch"
+            echo "branch name required"
+            return 1
+          end
+        end
+
+        # destination path: flag or prompt
+        set -l dest
+        if set -q _flag_path
+          set dest $_flag_path
+        else
+          read -P "destination path: " dest
+          if test -z "$dest"
+            echo "path required"
+            return 1
+          end
+        end
+
+        set dest (string replace -r '^~' $HOME $dest)
+        mkdir -p $dest
+
+        for repo in $repos
+          set repo (string trim $repo)
+          test -z "$repo"; and continue
+
+          set -l src "$srcs/$repo"
+          if not test -d "$src"
+            echo "not found: $src"
+            continue
+          end
+
+          set -l target "$dest/$repo"
+
+          echo ""
+          echo "$repo -> $target  (branch: $branch)"
+
+          if git -C $src rev-parse --verify $branch >/dev/null 2>&1
+            git -C $src worktree add $target $branch
+          else
+            git -C $src worktree add -b $branch $target
+          end
+
+          if test $status -eq 0
+            echo "done: $target"
+          else
+            echo "failed: $repo"
+          end
+        end
+      '';
+    };
+
     functions.fish_prompt = {
       body = ''
         set -l last_status $status

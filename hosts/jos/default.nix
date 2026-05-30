@@ -11,8 +11,9 @@
   # --------------------
   # networking
   # --------------------
-  networking.hostName            = "jos";
+  networking.hostName              = "jos";
   networking.networkmanager.enable = true;
+  networking.extraHosts            = "192.168.1.3 lab.local";
 
   # --------------------
   # locale / time
@@ -78,8 +79,9 @@
   # --------------------
   # security
   # --------------------
-  security.polkit.enable             = true;
-  security.pam.services.hyprlock    = {};
+  security.polkit.enable                         = true;
+  security.pam.services.hyprlock                = {};
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
   # --------------------
   # user

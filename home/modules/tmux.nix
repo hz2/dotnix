@@ -100,20 +100,20 @@ in
       # Status bar — bottom, nordfox palette
       set -g status-position  bottom
       set -g status-interval  5
-      set -g status-style     "bg=#2e3440,fg=#cdcecf"
+      set -g status-style     "bg=colour235,fg=colour252"
 
-      set -g status-left        "#[bg=#81a1c1,fg=#2e3440,bold] #S #[bg=#2e3440,fg=#81a1c1] "
+      set -g status-left        "#[bg=colour110,fg=colour235,bold] #S #[bg=colour235,fg=colour110] "
       set -g status-left-length 30
 
-      set -g status-right        "#(${nix-status})#[fg=#4c566a]│ #[fg=#a3be8c]#(${git-status}) #[fg=#4c566a]│ #[fg=#cdcecf]#(${system-resources}) #[fg=#4c566a]│ #[fg=#88c0d0]#(${notify-status})#[fg=#cdcecf]#(${time-display})"
+      set -g status-right        "#(${nix-status})#[fg=colour59]│ #[fg=colour150]#(${git-status}) #[fg=colour59]│ #[fg=colour252]#(${system-resources}) #[fg=colour59]│ #[fg=colour116]#(${notify-status})#[fg=colour252]#(${time-display})"
       set -g status-right-length 200
 
-      set -g window-status-format         "#[fg=#4c566a] #I:#W "
-      set -g window-status-current-format "#[bg=#3b4252,fg=#cdcecf,bold] #I:#W "
+      set -g window-status-format         "#[fg=colour59] #I:#W "
+      set -g window-status-current-format "#[bg=colour237,fg=colour252,bold] #I:#W "
 
-      set -g pane-border-style        "fg=#3b4252"
-      set -g pane-active-border-style "fg=#81a1c1"
-      set -g message-style            "bg=#3b4252,fg=#cdcecf"
+      set -g pane-border-style        "fg=colour237"
+      set -g pane-active-border-style "fg=colour110"
+      set -g message-style            "bg=colour237,fg=colour252"
 
       bind -T copy-mode-vi v               send-keys -X begin-selection
       bind -T copy-mode-vi y               send-keys -X copy-pipe-and-cancel "wl-copy"
