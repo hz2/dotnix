@@ -77,5 +77,5 @@
     components = [ "secrets" ];
   };
 
-  home.packages = [ pkgs.delta ];
+  home.packages = [ pkgs.delta pkgs.libsecret ];
 }
