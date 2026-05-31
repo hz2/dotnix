@@ -7,7 +7,7 @@
     gnumake
     pkg-config
 
-    # LSPs (rust-analyzer comes from rustup: `rustup component add rust-analyzer`)
+    # LSPs (rust-analyzer comes from rustup, declared per-project in rust-toolchain.toml)
     lua-language-server
     nil
     clang-tools
