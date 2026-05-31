@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   # --------------------
@@ -6,7 +6,19 @@
   # --------------------
   boot.loader.systemd-boot.enable      = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams                    = [ "i915.enable_psr=0" ];
+  boot.kernelParams                    = [ "i915.enable_psr=0" "numa=fake=2" ];
+
+  # enable NUMA emulation so a single-socket machine exposes two fake nodes;
+  # required for testing numaperf cross-NUMA migration detection
+  boot.kernelPatches = [
+    {
+      name  = "numa-emu";
+      patch = null;
+      extraStructuredConfig = {
+        NUMA_EMU = lib.kernel.yes;
+      };
+    }
+  ];
 
   # --------------------
   # networking

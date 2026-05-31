@@ -80,6 +80,10 @@ require("lazy").setup({
       })
 
       vim.lsp.enable({ "rust_analyzer", "nil_ls", "clangd", "lua_ls" })
+
+      vim.api.nvim_create_user_command("LspRestart", function()
+        for _, c in ipairs(vim.lsp.get_clients()) do c.stop() end
+      end, {})
     end,
   },
 
