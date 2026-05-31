@@ -76,12 +76,12 @@ in
     extraConfig = ''
       set -ag terminal-overrides ",tmux-256color:RGB"
 
-      bind | split-window -h -c "#{pane_current_path}"
-      bind % split-window -h -c "#{pane_current_path}"
-      bind - split-window -v -c "#{pane_current_path}"
-      bind '"' split-window -v -c "#{pane_current_path}"
+      bind | split-window -h
+      bind % split-window -h
+      bind - split-window -v
+      bind '"' split-window -v
 
-      bind c new-window -c "#{pane_current_path}"
+      bind c new-window
 
       bind h select-pane -L
       bind j select-pane -D
