@@ -14,7 +14,7 @@
     {
       name  = "numa-emu";
       patch = null;
-      extraStructuredConfig = {
+      structuredExtraConfig = {
         NUMA_EMU = lib.kernel.yes;
       };
     }
