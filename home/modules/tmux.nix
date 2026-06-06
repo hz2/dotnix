@@ -2,6 +2,7 @@
 
 let
   git-status = pkgs.writeShellScript "tmux-git-status" ''
+    cd "''${1:-$PWD}" 2>/dev/null || exit 0
     if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
       branch=$(git branch --show-current 2>/dev/null)
       git_status=$(git status --porcelain 2>/dev/null)
@@ -13,11 +14,12 @@ let
       output=" $branch"
 
       if [ -n "$git_status" ]; then
+        total=$(echo "$git_status" | wc -l | tr -d ' ')
         status_parts=""
         [ "$modified"  -gt 0 ] && status_parts="''${status_parts}~''${modified}"
         [ "$staged"    -gt 0 ] && status_parts="''${status_parts}+''${staged}"
         [ "$untracked" -gt 0 ] && status_parts="''${status_parts}?''${untracked}"
-        [ -n "$status_parts" ] && output="''${output} [''${status_parts}]"
+        [ -n "$status_parts" ] && output="''${output} ''${total} [''${status_parts}]"
       fi
 
       echo "$output"
@@ -105,7 +107,7 @@ in
       set -g status-left        "#[bg=colour110,fg=colour235,bold] #S #[bg=colour235,fg=colour110] "
       set -g status-left-length 30
 
-      set -g status-right        "#(${nix-status})#[fg=colour59]│ #[fg=colour150]#(${git-status}) #[fg=colour59]│ #[fg=colour252]#(${system-resources}) #[fg=colour59]│ #[fg=colour116]#(${notify-status})#[fg=colour252]#(${time-display})"
+      set -g status-right        "#(${nix-status})#[fg=colour59]│ #[fg=colour150]#(${git-status} #{pane_current_path}) #[fg=colour59]│ #[fg=colour252]#(${system-resources}) #[fg=colour59]│ #[fg=colour116]#(${notify-status})#[fg=colour252]#(${time-display})"
       set -g status-right-length 200
 
       set -g window-status-format         "#[fg=colour59] #I:#W "
