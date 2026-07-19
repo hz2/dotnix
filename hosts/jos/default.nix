@@ -25,7 +25,7 @@
   # --------------------
   networking.hostName              = "jos";
   networking.networkmanager.enable = true;
-  networking.extraHosts            = "192.168.1.3 lab.local";
+  networking.extraHosts            = "192.168.1.3 nlpogi lab.local jsondev.lab.local";
 
   # --------------------
   # locale / time
@@ -92,6 +92,7 @@
   # security
   # --------------------
   security.polkit.enable                         = true;
+  security.sudo.wheelNeedsPassword               = false;
   security.pam.services.hyprlock                = {};
   security.pam.services.greetd.enableGnomeKeyring = true;
 
