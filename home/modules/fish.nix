@@ -82,11 +82,16 @@
         if set -q _flag_path
           set dest $_flag_path
         else
-          read -P "destination path: " dest
+          read -P "workspace name (under ~/workspaces): " dest
           if test -z "$dest"
             echo "path required"
             return 1
           end
+        end
+
+        # bare name resolves under ~/workspaces
+        if not string match -q '*/*' -- $dest; and not string match -q '~*' -- $dest
+          set dest "~/workspaces/$dest"
         end
 
         set dest (string replace -r '^~' $HOME $dest)
@@ -117,6 +122,80 @@
             echo "done: $target"
           else
             echo "failed: $repo"
+          end
+        end
+      '';
+    };
+
+    functions.sync-repos = {
+      body = ''
+        set -l srcs ~/srcs
+
+        # repos from args or fzf
+        set -l repos $argv
+        if test -z "$repos"
+          set repos (ls $srcs 2>/dev/null | fzf --multi \
+            --prompt="repos > " \
+            --header="tab: multi-select  enter: confirm  ctrl-c: cancel" \
+            --preview="ls $srcs/{}" \
+            --preview-window=right:40%)
+          if test -z "$repos"
+            echo "no repos selected"
+            return 1
+          end
+        end
+
+        for repo in $repos
+          set repo (string trim $repo)
+          test -z "$repo"; and continue
+
+          echo "== $repo =="
+
+          set -l dir "$srcs/$repo"
+          if not test -d "$dir"
+            echo "not found: $dir"
+            continue
+          end
+
+          if not git -C $dir rev-parse --is-inside-work-tree >/dev/null 2>&1
+            echo "not a git repo: $dir"
+            continue
+          end
+
+          # capture porcelain first, inline test on multiline breaks
+          set -l dirty (git -C $dir status --porcelain 2>/dev/null)
+          if test -n "$dirty"
+            echo "skipped: uncommitted changes"
+            continue
+          end
+
+          if not git -C $dir fetch origin --prune --quiet
+            echo "failed: fetch"
+            continue
+          end
+
+          # pick main branch by priority
+          set -l branch
+          for candidate in main master develop
+            if git -C $dir show-ref --verify --quiet refs/remotes/origin/$candidate
+              set branch $candidate
+              break
+            end
+          end
+          if test -z "$branch"
+            echo "skipped: no main/master/develop on origin"
+            continue
+          end
+
+          if not git -C $dir checkout --quiet $branch
+            echo "failed: checkout $branch"
+            continue
+          end
+
+          if git -C $dir pull --ff-only --quiet origin $branch
+            echo "synced: $branch"
+          else
+            echo "failed: pull (not a fast-forward?)"
           end
         end
       '';
