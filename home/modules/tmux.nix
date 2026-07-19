@@ -63,6 +63,27 @@ nix-status = pkgs.writeShellScript "tmux-nix-status" ''
     echo "''${pdt} PDT | ''${utc} UTC | ''${ip:-N/A}"
   '';
 
+  # continuum's autosave hooks into status-right, which we overwrite below, so re-add its save script there
+  continuum-save = "${pkgs.tmuxPlugins.continuum}/share/tmux-plugins/continuum/scripts/continuum_save.sh";
+
+  sessionizer = pkgs.writeShellScript "tmux-sessionizer" ''
+    selected=$(
+      {
+        find "$HOME/srcs" -mindepth 1 -maxdepth 1 -type d 2>/dev/null
+        find "$HOME/workspaces" -mindepth 1 -maxdepth 2 -type d -not -path '*/.*' 2>/dev/null
+      } | ${pkgs.fzf}/bin/fzf
+    )
+    [ -z "$selected" ] && exit 0
+
+    # tmux uses . and : as target separators, so sanitize the session name
+    name=$(basename "$selected" | tr '.:' '__')
+
+    if ! tmux has-session -t "=$name" 2>/dev/null; then
+      tmux new-session -d -s "$name" -c "$selected"
+    fi
+    tmux switch-client -t "=$name"
+  '';
+
 in
 {
   programs.tmux = {
@@ -75,6 +96,23 @@ in
     keyMode      = "vi";
     terminal     = "tmux-256color";
 
+    # resurrect + continuum restore pane layout/cwd/scrollback on restart, but do not resume a live agent process that was running in a pane
+    plugins = [
+      {
+        plugin = pkgs.tmuxPlugins.resurrect;
+        extraConfig = ''
+          set -g @resurrect-capture-pane-contents 'on'
+        '';
+      }
+      {
+        plugin = pkgs.tmuxPlugins.continuum;
+        extraConfig = ''
+          set -g @continuum-restore 'on'
+          set -g @continuum-save-interval '15'
+        '';
+      }
+    ];
+
     extraConfig = ''
       set -ag terminal-overrides ",tmux-256color:RGB"
 
@@ -84,6 +122,12 @@ in
       bind '"' split-window -v
 
       bind c new-window
+
+      # fzf across ~/srcs and ~/workspaces, then switch to (or create) a session per dir
+      bind f display-popup -E "${sessionizer}"
+
+      # broadcast input to every pane at once, for prompting several agent panes together
+      bind e set-window-option synchronize-panes \; display-message "synchronize-panes #{?synchronize-panes,on,off}"
 
       bind h select-pane -L
       bind j select-pane -D
@@ -107,11 +151,18 @@ in
       set -g status-left        "#[bg=colour110,fg=colour235,bold] #S #[bg=colour235,fg=colour110] "
       set -g status-left-length 30
 
-      set -g status-right        "#(${nix-status})#[fg=colour59]│ #[fg=colour150]#(${git-status} #{pane_current_path}) #[fg=colour59]│ #[fg=colour252]#(${system-resources}) #[fg=colour59]│ #[fg=colour116]#(${notify-status})#[fg=colour252]#(${time-display})"
+      # leading conditional shows a bold red SYNC tag while broadcasting; #(continuum-save) drives autosave
+      # note: chained single-attribute #[] blocks, not one #[a,b,c] block - a comma inside a
+      # #{?cond,true,false} branch gets parsed as another branch separator and truncates the string
+      set -g status-right        "#{?synchronize-panes,#[bg=colour196]#[fg=colour235]#[bold] SYNC #[default],}#(${continuum-save})#(${nix-status})#[fg=colour59]│ #[fg=colour150]#(${git-status} #{pane_current_path}) #[fg=colour59]│ #[fg=colour252]#(${system-resources}) #[fg=colour59]│ #[fg=colour116]#(${notify-status})#[fg=colour252]#(${time-display})"
       set -g status-right-length 200
 
-      set -g window-status-format         "#[fg=colour59] #I:#W "
-      set -g window-status-current-format "#[bg=colour237,fg=colour252,bold] #I:#W "
+      set -g window-status-format         "#[fg=colour59] #I:#W#F "
+      set -g window-status-current-format "#[bg=colour237,fg=colour252,bold] #I:#W#F "
+
+      # flag a window when its panes go silent, e.g. an agent finished and is now idle
+      setw -g monitor-silence 30
+      set -g window-status-activity-style "bg=colour116,fg=colour235,bold"
 
       set -g pane-border-style        "fg=colour237"
       set -g pane-active-border-style "fg=colour110"
