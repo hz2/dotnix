@@ -91,14 +91,16 @@
         "$mod SHIFT, M,  exit"
 
         "$mod, h, movefocus, l"
-        "$mod, l, movefocus, r"
+        # "$mod, l, movefocus, r"  # l freed up for lock below
         "$mod, k, movefocus, u"
         "$mod, j, movefocus, d"
 
         "$mod SHIFT, h, movewindow, l"
-        "$mod SHIFT, l, movewindow, r"
+        # "$mod SHIFT, l, movewindow, r"  # l freed up for lock below
         "$mod SHIFT, k, movewindow, u"
         "$mod SHIFT, j, movewindow, d"
+
+        "$mod, L, exec, hyprlock"
 
         "$mod, 1, workspace, 1"   "$mod SHIFT, 1, movetoworkspace, 1"
         "$mod, 2, workspace, 2"   "$mod SHIFT, 2, movetoworkspace, 2"
