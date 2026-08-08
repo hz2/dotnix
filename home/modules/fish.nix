@@ -54,7 +54,7 @@
             end
           end
         else
-          set repos (ls $srcs 2>/dev/null | fzf --multi \
+          set repos (find $srcs -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | sort | fzf --multi \
             --prompt="repos > " \
             --header="tab: multi-select  enter: confirm  ctrl-c: cancel" \
             --preview="ls $srcs/{}" \
@@ -134,7 +134,7 @@
         # repos from args or fzf
         set -l repos $argv
         if test -z "$repos"
-          set repos (ls $srcs 2>/dev/null | fzf --multi \
+          set repos (find $srcs -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | sort | fzf --multi \
             --prompt="repos > " \
             --header="tab: multi-select  enter: confirm  ctrl-c: cancel" \
             --preview="ls $srcs/{}" \
