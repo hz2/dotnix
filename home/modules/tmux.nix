@@ -66,6 +66,24 @@ nix-status = pkgs.writeShellScript "tmux-nix-status" ''
   # continuum's autosave hooks into status-right, which we overwrite below, so re-add its save script there
   continuum-save = "${pkgs.tmuxPlugins.continuum}/share/tmux-plugins/continuum/scripts/continuum_save.sh";
 
+  # du over the whole store is too slow to run on every status-interval tick, so cache it for 15 min
+  nix-store-size = pkgs.writeShellScript "tmux-nix-store-size" ''
+    cache="$HOME/.cache/tmux-nix-store-size"
+    now=$(date +%s)
+    ts=0
+
+    if [ -f "$cache" ]; then
+      read -r ts size < "$cache"
+    fi
+
+    if [ -z "$size" ] || [ $((now - ts)) -gt 900 ]; then
+      size=$(du -sh /nix/store 2>/dev/null | cut -f1)
+      echo "$now $size" > "$cache"
+    fi
+
+    echo " store ''${size}"
+  '';
+
   sessionizer = pkgs.writeShellScript "tmux-sessionizer" ''
     selected=$(
       {
@@ -154,7 +172,7 @@ in
       # leading conditional shows a bold red SYNC tag while broadcasting; #(continuum-save) drives autosave
       # note: chained single-attribute #[] blocks, not one #[a,b,c] block - a comma inside a
       # #{?cond,true,false} branch gets parsed as another branch separator and truncates the string
-      set -g status-right        "#{?synchronize-panes,#[bg=colour196]#[fg=colour235]#[bold] SYNC #[default],}#(${continuum-save})#(${nix-status})#[fg=colour59]│ #[fg=colour150]#(${git-status} #{pane_current_path}) #[fg=colour59]│ #[fg=colour252]#(${system-resources}) #[fg=colour59]│ #[fg=colour116]#(${notify-status})#[fg=colour252]#(${time-display})"
+      set -g status-right        "#{?synchronize-panes,#[bg=colour196]#[fg=colour235]#[bold] SYNC #[default],}#(${continuum-save})#(${nix-status})#[fg=colour59]│ #[fg=colour252]#(${nix-store-size}) #[fg=colour59]│ #[fg=colour150]#(${git-status} #{pane_current_path}) #[fg=colour59]│ #[fg=colour252]#(${system-resources}) #[fg=colour59]│ #[fg=colour116]#(${notify-status})#[fg=colour252]#(${time-display})"
       set -g status-right-length 200
 
       set -g window-status-format         "#[fg=colour59] #I:#W#F "
