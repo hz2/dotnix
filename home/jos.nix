@@ -22,6 +22,7 @@
     lazygit
     xdg-utils
     zoxide
+    zotero
   ];
 
   home.sessionVariables = {
