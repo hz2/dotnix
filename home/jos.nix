@@ -11,6 +11,7 @@
     ./modules/dev.nix
     ./modules/hyprland.nix
     ./modules/cli-tools.nix
+    ./modules/latex.nix
   ];
 
   home.username    = "jos";
