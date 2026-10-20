@@ -12,6 +12,8 @@
     ./modules/hyprland.nix
     ./modules/cli-tools.nix
     ./modules/latex.nix
+    ./modules/openclaw.nix
+    ./modules/ai.nix
   ];
 
   home.username    = "jos";

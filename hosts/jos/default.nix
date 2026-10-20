@@ -1,6 +1,28 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, inputs, ... }:
 
 {
+  # --------------------
+  # nix overlays
+  # --------------------
+  nixpkgs.overlays = [ inputs.nix-openclaw.overlays.default ];
+
+  # --------------------
+  # secrets (agenix)
+  # --------------------
+  # no sshd on this host, so there's no /etc/ssh host key for agenix to use
+  # by default - decrypt with the personal key instead
+  age.identityPaths = [ "/home/jos/.ssh/id_ed25519" ];
+  age.secrets = {
+    discord-bot-token = {
+      file  = ../../secrets/discord-bot-token.age;
+      owner = "jos";
+    };
+    anthropic-api-key = {
+      file  = ../../secrets/anthropic-api-key.age;
+      owner = "jos";
+    };
+  };
+
   # --------------------
   # boot
   # --------------------
@@ -101,9 +123,23 @@
   # --------------------
   users.users.jos = {
     isNormalUser = true;
-    extraGroups  = [ "wheel" "networkmanager" "video" "audio" "input" "docker" ];
+    # dialout: serial access to /dev/ttyACM* (e.g. Flipper Zero) without a
+    # manual chmod every time it reconnects - see the udev rule below
+    extraGroups  = [ "wheel" "networkmanager" "video" "audio" "input" "docker" "dialout" ];
     shell        = pkgs.fish;
   };
+
+  # --------------------
+  # flipper zero (subghz dev)
+  # --------------------
+  # by default /dev/ttyACM* is root:dialout mode 0660, which only helps once
+  # the user is actually in the dialout group above; this udev rule scopes
+  # that to the Flipper's USB CDC ACM interface specifically (vendor/product
+  # id 0483:5740, ST's default VID + Flipper's PID) so other serial devices
+  # aren't affected. needed for `fbt launch` / flashing over USB.
+  services.udev.extraRules = ''
+    SUBSYSTEM=="tty", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", MODE="0660", GROUP="dialout"
+  '';
 
   # --------------------
   # shell
@@ -173,6 +209,8 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+  # zotero still bundles esr 140 as its runtime, drop once nixpkgs bumps it
+  nixpkgs.config.permittedInsecurePackages = [ "firefox-esr-140-bin-unwrapped-140.17.0esr" ];
 
   system.stateVersion = "24.11";
 }

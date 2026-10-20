@@ -4,6 +4,7 @@
   home.packages = with pkgs; [
     rustup
     gcc
+    cmake
     gnumake
     pkg-config
 

@@ -5,5 +5,6 @@
     texlive.combined.scheme-full
     ipe
     poppler-utils
+    typst
   ];
 }
