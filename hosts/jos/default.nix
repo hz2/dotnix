@@ -28,26 +28,14 @@
   # --------------------
   boot.loader.systemd-boot.enable      = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams                    = [ "i915.enable_psr=0" "numa=fake=2" ];
-
-  # enable NUMA emulation so a single-socket machine exposes two fake nodes;
-  # required for testing numaperf cross-NUMA migration detection
-  boot.kernelPatches = [
-    {
-      name  = "numa-emu";
-      patch = null;
-      structuredExtraConfig = {
-        NUMA_EMU = lib.kernel.yes;
-      };
-    }
-  ];
+  boot.kernelParams                    = [ "i915.enable_psr=0" ];
 
   # --------------------
   # networking
   # --------------------
   networking.hostName              = "jos";
   networking.networkmanager.enable = true;
-  networking.extraHosts            = "192.168.1.3 nlpogi lab.local jsondev.lab.local";
+  networking.extraHosts            = "192.168.1.20 nipogi";
 
   # --------------------
   # locale / time
