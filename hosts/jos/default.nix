@@ -189,11 +189,36 @@
   };
 
   # --------------------
+  # memory pressure
+  # --------------------
+  # 16 GB shared by the local vllm server (~8 GB, ~/srcs/hive scripts/devbox-vllm.sh)
+  # and nix builds; on 2026-10-26 a nix-daemon vm test build pushed the box into a
+  # global oom and the kernel killed vllm (see ~/srcs/hive docs/hardware.md).
+  # zram gives spikes somewhere to go, and builds are fenced in their own cgroup
+  # so a runaway build dies instead of the server.
+  zramSwap = {
+    enable        = true;
+    memoryPercent = 50;
+  };
+  # zram has no seek cost, so swap in single pages instead of read-ahead clusters
+  boot.kernel.sysctl."vm.page-cluster" = 0;
+  # vllm itself never swaps: devbox-vllm.sh runs it with --memory = --memory-swap (10g)
+
+  systemd.services.nix-daemon.serviceConfig = {
+    MemoryHigh     = "5G";   # throttle builds first
+    MemoryMax      = "6G";   # then oom-kill inside the build cgroup only
+    OOMScoreAdjust = 500;    # under global pressure, builds go before vllm
+  };
+
+  # --------------------
   # nix
   # --------------------
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store   = true;
+    # was max-jobs = 12 with cores = 0: twelve parallel builds each using every core
+    max-jobs = 2;
+    cores    = 6;
   };
 
   nixpkgs.config.allowUnfree = true;
