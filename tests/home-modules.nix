@@ -97,6 +97,51 @@ let
   };
   skillFiles = lib.attrNames skills.home.file;
 
+  claude = hm {
+    dotnix.ai.skills = {
+      enable = true;
+      skills.demo = ../config/skills/web-research;
+    };
+    dotnix.ai.claude.enable = true;
+  };
+  claudeFiles = lib.attrNames claude.home.file;
+
+  codex = hm {
+    dotnix.ai.skills = {
+      enable = true;
+      skills.demo = ../config/skills/web-research;
+    };
+    dotnix.ai.codex.enable = true;
+  };
+  codexFiles = lib.attrNames codex.home.file;
+
+  mcpServers = {
+    everything = {
+      command = "npx";
+      args = [
+        "-y"
+        "@modelcontextprotocol/server-everything"
+      ];
+    };
+  };
+
+  mcp = hm {
+    dotnix.ai.mcp = {
+      enable = true;
+      servers = mcpServers;
+    };
+    dotnix.ai.claude.enable = true;
+    dotnix.ai.codex.enable = true;
+  };
+  mcpFiles = lib.attrNames mcp.home.file;
+
+  piOverride = hm {
+    dotnix.ai.pi = {
+      enable = true;
+      package = pkgs.hello;
+    };
+  };
+
   helix = hm { dotnix.editors.helix.enable = true; };
   helixLangs = lib.listToAttrs (
     map (l: lib.nameValuePair l.name l) helix.programs.helix.languages.language
@@ -164,6 +209,32 @@ let
     "skills go to pi" = lib.elem ".pi/agent/skills/demo" skillFiles;
     "skills skip disabled codex" = !(lib.elem ".codex/skills/demo" skillFiles);
     "skills skip opencode by default" = !(lib.elem ".config/opencode/skills/demo" skillFiles);
+
+    "claude skills land through programs.claude-code" =
+      claude.programs.claude-code.skills.demo == ../config/skills/web-research;
+    "claude turns off the raw skills.nix symlink once it owns skills" =
+      !claude.dotnix.ai.skills.targets.claude;
+    "claude settings stay empty by default, so settings.json is left alone" =
+      claude.programs.claude-code.settings == { };
+    "claude writes no settings.json when settings stay empty" =
+      !(lib.elem "/home/test/.claude/settings.json" claudeFiles);
+
+    "codex skills land through programs.codex" =
+      codex.programs.codex.skills.demo == ../config/skills/web-research;
+    "codex turns off the raw skills.nix symlink once it owns skills" =
+      !codex.dotnix.ai.skills.targets.codex;
+    "codex writes its skill once, through programs.codex" = lib.elem ".codex/skills/demo" codexFiles;
+    "codex settings stay empty by default, so config.toml is left alone" =
+      codex.programs.codex.settings == { };
+    "codex writes no config.toml when settings stay empty" =
+      !(lib.elem ".codex/config.toml" codexFiles);
+
+    "mcp passes servers to programs.mcp" = mcp.programs.mcp.servers.everything.command == "npx";
+    "mcp turns on claude integration by default" = mcp.programs.claude-code.enableMcpIntegration;
+    "mcp turns on codex integration by default" = mcp.programs.codex.enableMcpIntegration;
+    "mcp writes the shared mcp.json" = lib.elem "/home/test/.config/mcp/mcp.json" mcpFiles;
+
+    "pi package override is honored" = piOverride.dotnix.ai.pi.package == pkgs.hello;
 
     "helix nix formatter" = helixLangs.nix.formatter.command == "nixfmt";
     "helix python formatter" =

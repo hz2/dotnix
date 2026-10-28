@@ -1,4 +1,15 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
+let
+  # daily llm-agents builds (numtide, not followed to nixpkgs) in place of the
+  # slower-moving nixpkgs packages; see modules/home/ai/{pi,claude,codex}.nix
+  # for the nixpkgs-only fallback these overrides replace
+  llmAgents = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
+in
 {
   # local llm tooling for the hive lab (~/srcs/hive)
   home.packages = [
@@ -10,6 +21,7 @@
   dotnix.ai = {
     pi = {
       enable = true;
+      package = llmAgents.pi;
       # pi talks to the laptop vllm from hive scripts/devbox-vllm.sh; the key is
       # generated there and read at runtime so it never enters the store
       providers.hive-local = {
@@ -36,5 +48,11 @@
       # claude code has its own web tools on this box
       skills.web-research = null;
     };
+    claude = {
+      enable = true;
+      package = llmAgents.claude-code;
+      # settings.json keeps whatever the claude cli itself writes there
+    };
+    codex.package = llmAgents.codex;
   };
 }

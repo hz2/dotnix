@@ -1,5 +1,8 @@
 {
   imports = [
+    ./ai/claude.nix
+    ./ai/codex.nix
+    ./ai/mcp.nix
     ./ai/pi.nix
     ./ai/rtk.nix
     ./ai/skills.nix

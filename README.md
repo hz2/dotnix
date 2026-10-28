@@ -11,7 +11,7 @@ flake.nix          inputs; outputs are assembled from parts/
 parts/             flake-parts modules: hosts, module exports, packages, checks, fmt, devshell
 modules/common/    options shared by both module trees (dotnix.user)
 modules/nixos/     system modules: user, nix, fish, fonts, audio, zram, nix-daemon fence, hyprland, nh
-modules/home/      home modules: shell, git, terminal, editors (helix, neovim), ai (pi, web, skills, rtk)
+modules/home/      home modules: shell, git, terminal, editors (helix, neovim), ai (pi, claude, codex, mcp, web, skills, rtk)
 pkgs/              overlay: dotnix-web, rtk
 config/            files the modules install: nvim lua, pi extensions and theme, agent skills
 hosts/hz2/         the laptop: hardware, system choices, home choices
@@ -59,6 +59,8 @@ dotnix.ai.pi = {
 };
 dotnix.ai.web.enable = true;    # web_search/web_fetch for pi, dotnix-web on PATH
 dotnix.ai.skills.enable = true; # web-research skill for claude/pi/codex
+dotnix.ai.claude.enable = true; # programs.claude-code, skills from dotnix.ai.skills
+dotnix.ai.codex.enable = true;  # programs.codex, skills from dotnix.ai.skills
 ```
 
 On NixOS with the home-manager module, `dotnix.user` set on the system is passed
@@ -71,3 +73,31 @@ ships. `dotnix-web` covers both with plain https: `dotnix-web search <query>` an
 `dotnix-web fetch <url>`. `dotnix.ai.web` installs it, registers it as pi tools,
 and ships a skill telling shell-only agents to use it. Backends: duckduckgo
 (default, no key), searxng, brave.
+
+## Claude Code, Codex and MCP
+
+`dotnix.ai.claude` and `dotnix.ai.codex` enable home-manager's
+`programs.claude-code` and `programs.codex`. Skills default to
+`dotnix.ai.skills.skills`, routed through each agent's own `skills` option
+instead of a raw symlink, so `dotnix.ai.skills.targets.claude`/`.codex` turn
+off once the matching module is enabled. Neither module manages
+`settings.json` / `config.toml` by default: `dotnix.ai.claude.settings` and
+`dotnix.ai.codex.settings` start empty, so the files stay exactly as the CLI
+or the user left them. Setting either to something non-empty merges it into
+the existing file (`mutableSettings`) instead of replacing it, since
+replacing would drop CLAUDE.md, hooks, and permissions the user configured
+interactively.
+
+`dotnix.ai.mcp.servers` passes through to `programs.mcp.servers` and, once
+enabled, turns on `enableMcpIntegration` on claude, codex and opencode by
+default:
+
+```nix
+dotnix.ai.mcp = {
+  enable = true;
+  servers.fetch = {
+    command = "uvx";
+    args = [ "mcp-server-fetch" ];
+  };
+};
+```

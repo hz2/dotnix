@@ -15,6 +15,14 @@ in
       default = 0;
       description = "Cores per build; 0 means all.";
     };
+    numtideCache = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Add numtide's binary cache as a substituter, so inputs built by
+        numtide (e.g. llm-agents.nix) are fetched instead of built locally.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -26,6 +34,12 @@ in
       auto-optimise-store = true;
       max-jobs = cfg.maxJobs;
       inherit (cfg) cores;
+    }
+    // lib.optionalAttrs cfg.numtideCache {
+      extra-substituters = [ "https://cache.numtide.com" ];
+      extra-trusted-public-keys = [
+        "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
+      ];
     };
     nixpkgs.config.allowUnfree = true;
   };

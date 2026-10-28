@@ -15,6 +15,9 @@
   flake.homeModules = {
     default = ../modules/home;
     alacritty = ../modules/home/alacritty.nix;
+    claude = ../modules/home/ai/claude.nix;
+    codex = ../modules/home/ai/codex.nix;
+    mcp = ../modules/home/ai/mcp.nix;
     pi = ../modules/home/ai/pi.nix;
     rtk = ../modules/home/ai/rtk.nix;
     skills = ../modules/home/ai/skills.nix;

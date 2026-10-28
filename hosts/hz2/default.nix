@@ -40,6 +40,7 @@ in
         # was max-jobs = 12 with cores = 0: twelve parallel builds each using every core
         maxJobs = 2;
         cores = 6;
+        numtideCache = true;
       };
       fish.enable = true;
       fonts.enable = true;
