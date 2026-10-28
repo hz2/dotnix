@@ -39,7 +39,7 @@
     # kept until helix muscle memory sticks
     editors.neovim = {
       enable = true;
-      configPath = "${config.home.homeDirectory}/nixos/config/nvim";
+      configPath = "${config.home.homeDirectory}/dotnix/config/nvim";
     };
   };
 
