@@ -1,11 +1,14 @@
 {
   config,
+  lib,
   pkgs,
   inputs,
   ...
 }:
 let
   user = config.dotnix.user;
+  secretsFile = ../../secrets/hz2.yaml;
+  hasSecrets = builtins.pathExists secretsFile;
 in
 {
   imports = [ ./hardware.nix ];
@@ -62,18 +65,15 @@ in
     desktop.hyprland.enable = true;
   };
 
-  # no sshd on this host, so there's no /etc/ssh host key for agenix to use
-  # by default; decrypt with the personal key instead
-  age.identityPaths = [ "${user.homeDirectory}/.ssh/id_ed25519" ];
-  age.secrets = {
-    discord-bot-token = {
-      file = ../../secrets/discord-bot-token.age;
-      owner = user.name;
-    };
-    anthropic-api-key = {
-      file = ../../secrets/anthropic-api-key.age;
-      owner = user.name;
-    };
+  # no sshd on this host, so there's no /etc/ssh host key for sops to use
+  # by default; decrypt with the personal key instead. secrets/hz2.yaml is
+  # created separately, see secrets/README.md; evaluation must not fail
+  # before it exists.
+  sops.age.sshKeyPaths = [ "${user.homeDirectory}/.ssh/id_ed25519" ];
+  sops.defaultSopsFile = secretsFile;
+  sops.secrets = lib.mkIf hasSecrets {
+    discord-bot-token.owner = user.name;
+    anthropic-api-key.owner = user.name;
   };
 
   boot.loader.systemd-boot.enable = true;

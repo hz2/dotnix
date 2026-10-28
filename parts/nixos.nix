@@ -6,7 +6,7 @@ let
       specialArgs = { inherit inputs self; };
       modules = [
         inputs.determinate.nixosModules.default
-        inputs.agenix.nixosModules.default
+        inputs.sops-nix.nixosModules.sops
         inputs.home-manager.nixosModules.home-manager
         self.nixosModules.default
         { nixpkgs.overlays = [ self.overlays.default ]; }
@@ -15,7 +15,10 @@ let
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = { inherit inputs self; };
           home-manager.backupFileExtension = "bak";
-          home-manager.sharedModules = [ self.homeModules.default ];
+          home-manager.sharedModules = [
+            inputs.sops-nix.homeManagerModules.sops
+            self.homeModules.default
+          ];
         }
         ../hosts/${name}/default.nix
       ];

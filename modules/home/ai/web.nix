@@ -46,7 +46,7 @@ in
     braveKeyCommand = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      example = "cat /run/agenix/brave-api-key";
+      example = "cat /run/secrets/brave-api-key";
       description = "Shell command printing a brave search api key.";
     };
     maxChars = lib.mkOption {

@@ -1,0 +1,10 @@
+# recipients for secrets/*.yaml
+#   age key for hz2: ssh-to-age < ~/.ssh/id_ed25519.pub
+#   after adding a recipient: sops updatekeys secrets/<host>.yaml
+keys:
+  - &hz2 age1REPLACE_WITH_ssh-to-age_OF_hz2_id_ed25519
+creation_rules:
+  - path_regex: secrets/hz2\.yaml$
+    key_groups:
+      - age:
+          - *hz2

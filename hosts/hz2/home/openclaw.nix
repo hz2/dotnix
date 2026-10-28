@@ -1,5 +1,18 @@
-{ inputs, ... }:
-
+{
+  osConfig ? null,
+  inputs,
+  ...
+}:
+let
+  # home-manager.nixosModules.home-manager passes osConfig; fall back to the
+  # plain sops-nix runtime path for a standalone home where it's null.
+  secretPath =
+    name:
+    if osConfig == null then
+      "/run/secrets/${name}"
+    else
+      osConfig.sops.secrets.${name}.path or "/run/secrets/${name}";
+in
 {
   imports = [ inputs.nix-openclaw.homeManagerModules.openclaw ];
 
@@ -9,8 +22,8 @@
     runtimePlugins = [ "discord" ];
 
     environment = {
-      DISCORD_BOT_TOKEN = "/run/agenix/discord-bot-token";
-      ANTHROPIC_API_KEY = "/run/agenix/anthropic-api-key";
+      DISCORD_BOT_TOKEN = secretPath "discord-bot-token";
+      ANTHROPIC_API_KEY = secretPath "anthropic-api-key";
     };
 
     config = {

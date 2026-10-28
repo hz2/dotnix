@@ -15,6 +15,8 @@
           pkgs.nvd
           pkgs.nix-diff
           pkgs.nix-tree
+          pkgs.sops
+          pkgs.ssh-to-age
           config.pre-commit.settings.package
         ]
         ++ config.pre-commit.settings.enabledPackages;

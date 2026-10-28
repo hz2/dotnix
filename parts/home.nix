@@ -9,6 +9,7 @@
     };
     extraSpecialArgs = { inherit inputs self; };
     modules = [
+      inputs.sops-nix.homeManagerModules.sops
       self.homeModules.default
       {
         dotnix.user = {
