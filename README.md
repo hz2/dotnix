@@ -14,15 +14,15 @@ modules/nixos/     system modules: user, nix, fish, fonts, audio, zram, nix-daem
 modules/home/      home modules: shell, git, terminal, editors (helix, neovim), ai (pi, web, skills, rtk)
 pkgs/              overlay: dotnix-web, rtk
 config/            files the modules install: nvim lua, pi extensions and theme, agent skills
-hosts/jos/         the laptop: hardware, system choices, home choices
+hosts/hz2/         the laptop: hardware, system choices, home choices
 tests/             eval-only module checks
 ```
 
 ## Use
 
 ```bash
-sudo nixos-rebuild switch --flake ~/dotnix#jos   # nixos host
-home-manager switch --flake ~/dotnix#jos         # any linux box, home only
+sudo nixos-rebuild switch --flake ~/dotnix#hz2   # nixos host
+home-manager switch --flake ~/dotnix#hz2         # any linux box, home only
 nix flake check                                  # module tests + builds every config
 nix fmt
 ```

@@ -29,8 +29,8 @@ and sets options.
 ## Verify
 
 - `nix fmt` then `nix flake check` before every commit; it runs
-  `tests/home-modules.nix` and builds the jos system and standalone home.
-- Pure refactors: `nix eval --raw .#nixosConfigurations.jos.config.system.build.toplevel.drvPath`
+  `tests/home-modules.nix` and builds the hz2 system and standalone home.
+- Pure refactors: `nix eval --raw .#nixosConfigurations.hz2.config.system.build.toplevel.drvPath`
   must not change. If it does, `nix-diff` old and new drvs (devshell has it).
 - New module logic gets an assertion in `tests/home-modules.nix`; use
   `hmUnchecked` to test that a bad config trips an assertion.

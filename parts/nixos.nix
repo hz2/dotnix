@@ -22,5 +22,5 @@ let
     };
 in
 {
-  flake.nixosConfigurations.jos = mkHost "jos";
+  flake.nixosConfigurations.hz2 = mkHost "hz2";
 }

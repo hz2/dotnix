@@ -1,7 +1,7 @@
 { inputs, self, ... }:
 {
-  # standalone home-manager for non-nixos machines: `home-manager switch --flake .#jos`
-  flake.homeConfigurations.jos = inputs.home-manager.lib.homeManagerConfiguration {
+  # standalone home-manager for non-nixos machines: `home-manager switch --flake .#hz2`
+  flake.homeConfigurations.hz2 = inputs.home-manager.lib.homeManagerConfiguration {
     pkgs = import inputs.nixpkgs {
       system = "x86_64-linux";
       overlays = [ self.overlays.default ];
@@ -12,19 +12,14 @@
       self.homeModules.default
       {
         dotnix.user = {
-          name = "jos";
-          fullName = "Jason Devers";
-          email = "jsondevers@gmail.com";
+          name = "hz2";
+          email = "hz2@users.noreply.github.com";
         };
         home.stateVersion = "24.11";
         dotnix = {
           shell.fish.enable = true;
           shell.cliTools.enable = true;
-          git = {
-            enable = true;
-            userName = "hz2";
-            userEmail = "hz2@users.noreply.github.com";
-          };
+          git.enable = true;
           editors.helix.enable = true;
           ai.pi.enable = true;
           ai.web.enable = true;

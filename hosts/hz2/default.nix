@@ -16,9 +16,8 @@ in
 
   dotnix = {
     user = {
-      name = "jos";
-      fullName = "Jason Devers";
-      email = "jsondevers@gmail.com";
+      name = "hz2";
+      email = "hz2@users.noreply.github.com";
       # dialout: serial access to /dev/ttyACM* (flipper zero) without a manual
       # chmod every reconnect, see the udev rule below
       extraGroups = [
@@ -77,7 +76,7 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelParams = [ "i915.enable_psr=0" ];
 
-  networking.hostName = "jos";
+  networking.hostName = "hz2";
   networking.networkmanager.enable = true;
   networking.extraHosts = "192.168.1.20 nipogi";
 
