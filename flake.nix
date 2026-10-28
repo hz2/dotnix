@@ -20,6 +20,17 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    git-hooks = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # daily builds of pi, claude-code and codex; not following nixpkgs keeps
+    # their binary cache usable
+    llm-agents.url = "github:numtide/llm-agents.nix";
     nix-openclaw = {
       url = "github:openclaw/nix-openclaw";
       inputs.home-manager.follows = "home-manager";
