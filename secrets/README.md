@@ -1,52 +1,33 @@
 # secrets
 
-sops-encrypted, one yaml per host. agenix was dropped for sops-nix; see
-git history before this commit for the old agenix recipe (`secrets.nix`,
-`secrets/*.age`, commit `ab0f331`).
+sops-encrypted, one yaml per host, decrypted at activation by sops-nix with the
+recipients in `../.sops.yaml`. `hosts/hz2/default.nix` only declares secrets when
+`secrets/hz2.yaml` exists, so evaluation and `nix flake check` work without it.
 
-## migrating an existing checkout
+## hz2
 
-The host config now reads `secrets/hz2.yaml`, which this repo doesn't ship
-(public repo, no plaintext or ciphertext secrets in history going forward).
-Before pulling this change, recover the old plaintext values with your
-personal ssh key:
+The recipient is the laptop's `~/.ssh/id_ed25519`, the same key agenix used.
+To move the two old agenix secrets over, on the laptop:
 
 ```
-age -d -i ~/.ssh/id_ed25519 secrets/discord-bot-token.age
-age -d -i ~/.ssh/id_ed25519 secrets/anthropic-api-key.age
+for s in discord-bot-token anthropic-api-key; do
+  git show 1787a84~1:secrets/$s.age | age -d -i ~/.ssh/id_ed25519
+  echo
+done
+sops secrets/hz2.yaml
 ```
 
-If you've already pulled, get the old files back from history first:
+and put the printed values in as:
 
-```
-git show ab0f331:secrets/discord-bot-token.age > /tmp/discord-bot-token.age
-git show ab0f331:secrets/anthropic-api-key.age > /tmp/anthropic-api-key.age
-age -d -i ~/.ssh/id_ed25519 /tmp/discord-bot-token.age
-age -d -i ~/.ssh/id_ed25519 /tmp/anthropic-api-key.age
+```yaml
+discord-bot-token: <value>
+anthropic-api-key: <value>
 ```
 
-## creating secrets/hz2.yaml
+Commit `secrets/hz2.yaml` (it's ciphertext) and rebuild. They land in
+`/run/secrets/<name>`, owned by the user.
 
-1. Derive your age recipient from the ssh key and put it in `.sops.yaml` in
-   place of the `age1REPLACE_WITH_...` placeholder:
+## adding a recipient
 
-   ```
-   ssh-to-age < ~/.ssh/id_ed25519.pub
-   ```
-
-2. Create the file (sops uses `.sops.yaml` to pick the recipient and editor):
-
-   ```
-   sops secrets/hz2.yaml
-   ```
-
-3. Add the two keys the host expects, with the values recovered above:
-
-   ```yaml
-   discord-bot-token: <value>
-   anthropic-api-key: <value>
-   ```
-
-`hosts/hz2/default.nix` guards `sops.secrets` with `builtins.pathExists`, so
-`nix flake check` and `nix flake show` work before this file exists; the
-actual `openclaw` secrets just won't be available until it's created.
+Add its age key to `../.sops.yaml` (for an ssh key: `ssh-to-age < key.pub`),
+then `sops updatekeys secrets/<host>.yaml`.

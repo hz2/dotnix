@@ -1,8 +1,8 @@
 # recipients for secrets/*.yaml
-#   age key for hz2: ssh-to-age < ~/.ssh/id_ed25519.pub
+#   hz2: ssh-to-age < ~/.ssh/id_ed25519.pub on the laptop (same key agenix used)
 #   after adding a recipient: sops updatekeys secrets/<host>.yaml
 keys:
-  - &hz2 age1REPLACE_WITH_ssh-to-age_OF_hz2_id_ed25519
+  - &hz2 age1esyveu0pnn9wtjyvysu6e44nz4k279jqhxhwgdx7kcrwnlxtvvys2ay3a0
 creation_rules:
   - path_regex: secrets/hz2\.yaml$
     key_groups:
