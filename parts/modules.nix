@@ -5,6 +5,7 @@
     fish = ../modules/nixos/fish.nix;
     fonts = ../modules/nixos/fonts.nix;
     hyprland = ../modules/nixos/hyprland.nix;
+    nh = ../modules/nixos/nh.nix;
     nix = ../modules/nixos/nix.nix;
     nix-daemon-fence = ../modules/nixos/nix-daemon-fence.nix;
     user = ../modules/nixos/user.nix;

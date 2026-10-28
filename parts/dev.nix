@@ -1,6 +1,6 @@
 {
   perSystem =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       treefmt = {
         projectRootFile = "flake.nix";
@@ -15,7 +15,10 @@
           pkgs.nvd
           pkgs.nix-diff
           pkgs.nix-tree
-        ];
+          config.pre-commit.settings.package
+        ]
+        ++ config.pre-commit.settings.enabledPackages;
+        shellHook = config.pre-commit.installationScript;
       };
     };
 }

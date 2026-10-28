@@ -41,6 +41,10 @@ in
       fish.enable = true;
       fonts.enable = true;
       audio.enable = true;
+      nh = {
+        enable = true;
+        clean.enable = true;
+      };
 
       # 16 GB shared by the local vllm server (~8 GB, hive scripts/devbox-vllm.sh)
       # and nix builds; on 2026-10-26 a nix-daemon vm test build pushed the box into

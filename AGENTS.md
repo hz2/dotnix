@@ -29,9 +29,16 @@ and sets options.
 ## Verify
 
 - `nix fmt` then `nix flake check` before every commit; it runs
-  `tests/home-modules.nix` and builds the hz2 system and standalone home.
+  `tests/home-modules.nix`, the pre-commit hooks (treefmt, gitleaks) as a flake
+  check, and builds the hz2 system and standalone home.
+- `nix develop -c pre-commit run --all-files` runs the same hooks locally; the
+  devshell installs them on entry via `pre-commit.installationScript`.
 - Pure refactors: `nix eval --raw .#nixosConfigurations.hz2.config.system.build.toplevel.drvPath`
   must not change. If it does, `nix-diff` old and new drvs (devshell has it).
+- Before switching a NixOS host, review `nh os build` (or `nh os switch`,
+  which builds, shows the generation package diff by default, then
+  activates); pass `--diff always` to force the diff even when the current
+  and deployed configs don't match.
 - New module logic gets an assertion in `tests/home-modules.nix`; use
   `hmUnchecked` to test that a bad config trips an assertion.
 

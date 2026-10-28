@@ -10,7 +10,7 @@ hosts that use them. Every module is off until enabled, so importing
 flake.nix          inputs; outputs are assembled from parts/
 parts/             flake-parts modules: hosts, module exports, packages, checks, fmt, devshell
 modules/common/    options shared by both module trees (dotnix.user)
-modules/nixos/     system modules: user, nix, fish, fonts, audio, zram, nix-daemon fence, hyprland
+modules/nixos/     system modules: user, nix, fish, fonts, audio, zram, nix-daemon fence, hyprland, nh
 modules/home/      home modules: shell, git, terminal, editors (helix, neovim), ai (pi, web, skills, rtk)
 pkgs/              overlay: dotnix-web, rtk
 config/            files the modules install: nvim lua, pi extensions and theme, agent skills
@@ -23,8 +23,17 @@ tests/             eval-only module checks
 ```bash
 sudo nixos-rebuild switch --flake ~/dotnix#hz2   # nixos host
 home-manager switch --flake ~/dotnix#hz2         # any linux box, home only
-nix flake check                                  # module tests + builds every config
+nix flake check                                  # module tests, pre-commit hooks + builds every config
 nix fmt
+```
+
+With `dotnix.system.nh.enable`, `nh` replaces `nixos-rebuild` with a generation
+package diff (shown by default) and, optionally, a cleanup timer:
+
+```bash
+nh os build              # build only, show the diff
+nh os switch             # build, show the diff, then activate
+nh clean all             # same args as dotnix.system.nh.clean.extraArgs
 ```
 
 From another flake:
