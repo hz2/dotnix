@@ -23,8 +23,9 @@
     };
     git = {
       enable = true;
-      # keep the short handle as author name, not fullName
-      userName = "jos";
+      # commits go out under the public github identity
+      userName = "hz2";
+      userEmail = "hz2@users.noreply.github.com";
       editor = "hx";
       sendEmail = {
         # lkml patch submission; password lives in gnome-keyring

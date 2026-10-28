@@ -20,7 +20,11 @@
         dotnix = {
           shell.fish.enable = true;
           shell.cliTools.enable = true;
-          git.enable = true;
+          git = {
+            enable = true;
+            userName = "hz2";
+            userEmail = "hz2@users.noreply.github.com";
+          };
           editors.helix.enable = true;
           ai.pi.enable = true;
           ai.web.enable = true;
