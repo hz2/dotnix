@@ -32,7 +32,9 @@
       systems = [ "x86_64-linux" ];
       imports = [
         inputs.treefmt-nix.flakeModule
+        ./parts/checks.nix
         ./parts/dev.nix
+        ./parts/home.nix
         ./parts/modules.nix
         ./parts/nixos.nix
         ./parts/packages.nix
