@@ -11,7 +11,7 @@ in
   options.dotnix.shell.cliTools.enable = lib.mkEnableOption "bat, eza and lazygit";
 
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; [ lazygit ];
+    home.packages = [ pkgs.lazygit ];
 
     programs.bat = {
       enable = true;

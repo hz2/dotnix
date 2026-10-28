@@ -11,11 +11,11 @@ in
   options.dotnix.apps.latex.enable = lib.mkEnableOption "texlive, ipe and typst";
 
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; [
-      texlive.combined.scheme-full
-      ipe
-      poppler-utils
-      typst
+    home.packages = [
+      pkgs.texlive.combined.scheme-full
+      pkgs.ipe
+      pkgs.poppler-utils
+      pkgs.typst
     ];
   };
 }

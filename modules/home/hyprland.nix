@@ -24,18 +24,18 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; [
-      hyprlock
-      hyprpaper
-      grim
-      slurp
-      swappy
-      wl-clipboard
-      brightnessctl
-      playerctl
-      blueman
-      networkmanagerapplet
-      pavucontrol
+    home.packages = [
+      pkgs.hyprlock
+      pkgs.hyprpaper
+      pkgs.grim
+      pkgs.slurp
+      pkgs.swappy
+      pkgs.wl-clipboard
+      pkgs.brightnessctl
+      pkgs.playerctl
+      pkgs.blueman
+      pkgs.networkmanagerapplet
+      pkgs.pavucontrol
     ];
 
     wayland.windowManager.hyprland = {
@@ -195,7 +195,7 @@ in
       };
     };
 
-    # ---------- Waybar ----------
+    # waybar
     programs.waybar = {
       enable = true;
       settings = [
@@ -317,7 +317,7 @@ in
       '';
     };
 
-    # ---------- Mako ----------
+    # mako
     services.mako = {
       enable = true;
       settings = {
@@ -331,7 +331,7 @@ in
       };
     };
 
-    # ---------- Hypridle ----------
+    # hypridle
     services.hypridle = {
       enable = true;
       settings = {

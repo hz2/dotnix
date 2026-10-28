@@ -11,22 +11,22 @@ in
   options.dotnix.dev.toolchain.enable = lib.mkEnableOption "rustup, c toolchain, go and nix tooling";
 
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; [
-      rustup
-      gcc
-      cmake
-      gnumake
-      pkg-config
+    home.packages = [
+      pkgs.rustup
+      pkgs.gcc
+      pkgs.cmake
+      pkgs.gnumake
+      pkgs.pkg-config
 
       # LSPs (rust-analyzer comes from rustup, declared per-project in rust-toolchain.toml)
-      lua-language-server
-      nil
-      clang-tools
+      pkgs.lua-language-server
+      pkgs.nil
+      pkgs.clang-tools
 
       # Dev tools
-      gh
-      htop
-      nixfmt
+      pkgs.gh
+      pkgs.htop
+      pkgs.nixfmt
     ];
 
     programs.go = {

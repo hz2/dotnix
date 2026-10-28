@@ -39,7 +39,7 @@ in
           blinking = "Off";
         };
 
-        # Nightfox — nordfox palette
+        # nightfox nordfox palette
         colors = {
           primary = {
             background = "#2e3440";

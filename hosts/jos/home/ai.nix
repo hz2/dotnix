@@ -2,11 +2,11 @@
 
 {
   # local llm tooling for the hive lab (~/srcs/hive)
-  home.packages = with pkgs; [
-    python3Packages.huggingface-hub # hf cli
-    sops
-    age
-    pi-coding-agent
+  home.packages = [
+    pkgs.python3Packages.huggingface-hub # hf cli
+    pkgs.sops
+    pkgs.age
+    pkgs.pi-coding-agent
   ];
 
   # pi talks to the laptop vllm from ~/srcs/hive/scripts/devbox-vllm.sh

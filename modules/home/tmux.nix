@@ -170,7 +170,7 @@ in
 
         set -g renumber-windows on
 
-        # Status bar — bottom, nordfox palette
+        # status bar at the bottom, nordfox palette
         set -g status-position  bottom
         set -g status-interval  5
         set -g status-style     "bg=colour235,fg=colour252"
