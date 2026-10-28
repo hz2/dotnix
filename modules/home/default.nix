@@ -1,5 +1,9 @@
 {
   imports = [
+    ./ai/pi.nix
+    ./ai/rtk.nix
+    ./ai/skills.nix
+    ./ai/web.nix
     ./alacritty.nix
     ./cli-tools.nix
     ./dev.nix

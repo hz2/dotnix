@@ -14,6 +14,10 @@
   flake.homeModules = {
     default = ../modules/home;
     alacritty = ../modules/home/alacritty.nix;
+    pi = ../modules/home/ai/pi.nix;
+    rtk = ../modules/home/ai/rtk.nix;
+    skills = ../modules/home/ai/skills.nix;
+    web = ../modules/home/ai/web.nix;
     cli-tools = ../modules/home/cli-tools.nix;
     dev = ../modules/home/dev.nix;
     direnv = ../modules/home/direnv.nix;

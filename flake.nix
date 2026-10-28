@@ -35,6 +35,7 @@
         ./parts/dev.nix
         ./parts/modules.nix
         ./parts/nixos.nix
+        ./parts/packages.nix
       ];
     };
 }

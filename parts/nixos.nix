@@ -9,6 +9,7 @@ let
         inputs.agenix.nixosModules.default
         inputs.home-manager.nixosModules.home-manager
         self.nixosModules.default
+        { nixpkgs.overlays = [ self.overlays.default ]; }
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
