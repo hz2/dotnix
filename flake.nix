@@ -33,6 +33,7 @@
       imports = [
         inputs.treefmt-nix.flakeModule
         ./parts/dev.nix
+        ./parts/modules.nix
         ./parts/nixos.nix
       ];
     };
