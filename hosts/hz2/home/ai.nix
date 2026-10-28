@@ -50,8 +50,9 @@ in
     };
     claude = {
       enable = true;
-      package = llmAgents.claude-code;
-      # settings.json keeps whatever the claude cli itself writes there
+      # claude comes from its native self-updating installer; nix only manages
+      # skills, and settings.json stays whatever the cli writes there
+      package = null;
     };
     codex.package = llmAgents.codex;
   };
