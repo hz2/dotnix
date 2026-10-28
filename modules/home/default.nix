@@ -8,6 +8,7 @@
     ./cli-tools.nix
     ./dev.nix
     ./direnv.nix
+    ./editors/helix.nix
     ./editors/neovim.nix
     ./fish.nix
     ./git.nix

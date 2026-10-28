@@ -25,6 +25,7 @@
       enable = true;
       # keep the short handle as author name, not fullName
       userName = "jos";
+      editor = "hx";
       sendEmail = {
         # lkml patch submission; password lives in gnome-keyring
         enable = true;
@@ -34,6 +35,8 @@
     };
     desktop.hyprland.enable = true;
     apps.latex.enable = true;
+    editors.helix.enable = true;
+    # kept until helix muscle memory sticks
     editors.neovim = {
       enable = true;
       configPath = "${config.home.homeDirectory}/nixos/config/nvim";
@@ -48,7 +51,6 @@
   ];
 
   home.sessionVariables = {
-    EDITOR = "nvim";
     BROWSER = "firefox";
     TERM = "alacritty";
   };

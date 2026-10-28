@@ -23,6 +23,7 @@
     direnv = ../modules/home/direnv.nix;
     fish = ../modules/home/fish.nix;
     git = ../modules/home/git.nix;
+    helix = ../modules/home/editors/helix.nix;
     hyprland = ../modules/home/hyprland.nix;
     latex = ../modules/home/latex.nix;
     neovim = ../modules/home/editors/neovim.nix;
