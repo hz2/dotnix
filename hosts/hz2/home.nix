@@ -33,7 +33,16 @@
     };
     desktop.hyprland.enable = true;
     apps.latex.enable = true;
-    editors.helix.enable = true;
+    editors.helix = {
+      enable = true;
+      wordCompletion.enable = true;
+      ai = {
+        enable = true;
+        endpoint = "http://127.0.0.1:8000/v1";
+        model = "local";
+        apiKeyFile = "~/.config/hive/local-key";
+      };
+    };
     # kept until helix muscle memory sticks
     editors.neovim = {
       enable = true;

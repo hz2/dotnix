@@ -102,6 +102,36 @@ let
     map (l: lib.nameValuePair l.name l) helix.programs.helix.languages.language
   );
 
+  # --- helix: scls/lsp-ai (word completion + local-llm completion) ---
+  # kept in its own block near the existing helix checks above to minimise
+  # merge conflicts with other agents appending pi/claude checks.
+  helixAi = hm {
+    dotnix.editors.helix = {
+      enable = true;
+      wordCompletion.enable = true;
+      ai = {
+        enable = true;
+        endpoint = "http://127.0.0.1:8000/v1";
+        model = "local";
+        apiKeyFile = "~/.config/hive/local-key";
+      };
+    };
+  };
+  helixAiLangs = lib.listToAttrs (
+    map (l: lib.nameValuePair l.name l) helixAi.programs.helix.languages.language
+  );
+  helixAiServers = helixAi.programs.helix.languages.language-server;
+  # whole rendered languages.toml set, serialized, to check no literal key leaks in
+  helixAiRendered = builtins.toJSON helixAi.programs.helix.languages;
+
+  helixMissingUpstream = hmUnchecked {
+    dotnix.editors.helix = {
+      enable = true;
+      wordCompletion.enable = true;
+      languages.yaml = { };
+    };
+  };
+
   checks = {
     "pi renders provider" = piProvider.baseUrl == "http://127.0.0.1:8000/v1";
     "pi keeps command api key" = piProvider.apiKey == "!cat /run/key";
@@ -145,6 +175,32 @@ let
     "helix no format on save" = !helixLangs.rust.auto-format;
     "helix ctrl-h window nav" = helix.programs.helix.settings.keys.normal.C-h == "jump_view_left";
     "helix ships formatter packages" = lib.elem pkgs.nixfmt helix.programs.helix.extraPackages;
+
+    # --- helix: scls/lsp-ai ---
+    "helix scls server defined" = helixAiServers ? scls;
+    "helix lsp-ai server defined" = helixAiServers ? lsp-ai;
+    "helix scls appended to language with explicit servers" =
+      lib.elem "scls" helixAiLangs.nix.language-servers;
+    "helix scls appended to language kept at upstream default" =
+      lib.elem "scls" helixAiLangs.rust.language-servers
+      && lib.elem "rust-analyzer" helixAiLangs.rust.language-servers;
+    "helix lsp-ai appended to default ai.languages" =
+      lib.elem "lsp-ai" helixAiLangs.rust.language-servers;
+    "helix lsp-ai not appended outside ai.languages" =
+      !(lib.elem "lsp-ai" helixAiLangs.markdown.language-servers);
+    "helix scls appended everywhere regardless of ai.languages" =
+      lib.elem "scls" helixAiLangs.markdown.language-servers;
+    "helix lsp-ai model config has endpoint and model" =
+      helixAiServers.lsp-ai.config.models.model1.chat_endpoint
+      == "http://127.0.0.1:8000/v1/chat/completions"
+      && helixAiServers.lsp-ai.config.models.model1.model == "local";
+    "helix lsp-ai reads key via env var, not inline" =
+      !(helixAiServers.lsp-ai.config.models.model1 ? auth_token);
+    "helix rendered languages.toml has no api key field at all" =
+      !(lib.hasInfix "auth_token\"" helixAiRendered);
+    "helix missing upstream servers trips assertion" = lib.any (lib.hasInfix "languageServers = null") (
+      failedAssertions helixMissingUpstream
+    );
   };
 
   failed = lib.attrNames (lib.filterAttrs (_: ok: !ok) checks);
