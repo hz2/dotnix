@@ -12,9 +12,9 @@
   };
 
   programs.eza = {
-    enable                = true;
+    enable = true;
     enableFishIntegration = true;
-    git                   = true;
-    icons                 = "auto";
+    git = true;
+    icons = "auto";
   };
 }

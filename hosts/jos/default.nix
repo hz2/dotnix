@@ -1,4 +1,9 @@
-{ pkgs, lib, inputs, ... }:
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 {
   # --------------------
@@ -14,11 +19,11 @@
   age.identityPaths = [ "/home/jos/.ssh/id_ed25519" ];
   age.secrets = {
     discord-bot-token = {
-      file  = ../../secrets/discord-bot-token.age;
+      file = ../../secrets/discord-bot-token.age;
       owner = "jos";
     };
     anthropic-api-key = {
-      file  = ../../secrets/anthropic-api-key.age;
+      file = ../../secrets/anthropic-api-key.age;
       owner = "jos";
     };
   };
@@ -26,28 +31,28 @@
   # --------------------
   # boot
   # --------------------
-  boot.loader.systemd-boot.enable      = true;
+  boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams                    = [ "i915.enable_psr=0" ];
+  boot.kernelParams = [ "i915.enable_psr=0" ];
 
   # --------------------
   # networking
   # --------------------
-  networking.hostName              = "jos";
+  networking.hostName = "jos";
   networking.networkmanager.enable = true;
-  networking.extraHosts            = "192.168.1.20 nipogi";
+  networking.extraHosts = "192.168.1.20 nipogi";
 
   # --------------------
   # locale / time
   # --------------------
-  time.timeZone      = "America/Los_Angeles";
+  time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";
 
   # --------------------
   # keyboard
   # --------------------
   services.xserver.xkb = {
-    layout  = "us";
+    layout = "us";
     options = "caps:escape";
   };
 
@@ -55,7 +60,7 @@
   # Hyprland
   # --------------------
   programs.hyprland = {
-    enable          = true;
+    enable = true;
     xwayland.enable = true;
   };
 
@@ -63,7 +68,7 @@
     enable = true;
     settings.default_session = {
       command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd Hyprland";
-      user    = "greeter";
+      user = "greeter";
     };
   };
 
@@ -71,10 +76,10 @@
   # audio
   # --------------------
   services.pipewire = {
-    enable            = true;
-    alsa.enable       = true;
+    enable = true;
+    alsa.enable = true;
     alsa.support32Bit = true;
-    pulse.enable      = true;
+    pulse.enable = true;
     wireplumber.enable = true;
   };
 
@@ -83,15 +88,15 @@
   # --------------------
   hardware.graphics.enable = true;
   hardware.bluetooth = {
-    enable       = true;
-    powerOnBoot  = true;
+    enable = true;
+    powerOnBoot = true;
   };
 
   # --------------------
   # portals
   # --------------------
   xdg.portal = {
-    enable       = true;
+    enable = true;
     extraPortals = with pkgs; [
       xdg-desktop-portal-hyprland
       xdg-desktop-portal-gtk
@@ -101,9 +106,9 @@
   # --------------------
   # security
   # --------------------
-  security.polkit.enable                         = true;
-  security.sudo.wheelNeedsPassword               = false;
-  security.pam.services.hyprlock                = {};
+  security.polkit.enable = true;
+  security.sudo.wheelNeedsPassword = false;
+  security.pam.services.hyprlock = { };
   security.pam.services.greetd.enableGnomeKeyring = true;
 
   # --------------------
@@ -113,8 +118,16 @@
     isNormalUser = true;
     # dialout: serial access to /dev/ttyACM* (e.g. Flipper Zero) without a
     # manual chmod every time it reconnects - see the udev rule below
-    extraGroups  = [ "wheel" "networkmanager" "video" "audio" "input" "docker" "dialout" ];
-    shell        = pkgs.fish;
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+      "video"
+      "audio"
+      "input"
+      "docker"
+      "dialout"
+    ];
+    shell = pkgs.fish;
   };
 
   # --------------------
@@ -197,7 +210,7 @@
   # zram gives spikes somewhere to go, and builds are fenced in their own cgroup
   # so a runaway build dies instead of the server.
   zramSwap = {
-    enable        = true;
+    enable = true;
     memoryPercent = 50;
   };
   # zram has no seek cost, so swap in single pages instead of read-ahead clusters
@@ -205,20 +218,23 @@
   # vllm itself never swaps: devbox-vllm.sh runs it with --memory = --memory-swap (10g)
 
   systemd.services.nix-daemon.serviceConfig = {
-    MemoryHigh     = "5G";   # throttle builds first
-    MemoryMax      = "6G";   # then oom-kill inside the build cgroup only
-    OOMScoreAdjust = 500;    # under global pressure, builds go before vllm
+    MemoryHigh = "5G"; # throttle builds first
+    MemoryMax = "6G"; # then oom-kill inside the build cgroup only
+    OOMScoreAdjust = 500; # under global pressure, builds go before vllm
   };
 
   # --------------------
   # nix
   # --------------------
   nix.settings = {
-    experimental-features = [ "nix-command" "flakes" ];
-    auto-optimise-store   = true;
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    auto-optimise-store = true;
     # was max-jobs = 12 with cores = 0: twelve parallel builds each using every core
     max-jobs = 2;
-    cores    = 6;
+    cores = 6;
   };
 
   nixpkgs.config.allowUnfree = true;

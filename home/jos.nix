@@ -16,9 +16,9 @@
     ./modules/ai.nix
   ];
 
-  home.username    = "jos";
+  home.username = "jos";
   home.homeDirectory = "/home/jos";
-  home.stateVersion  = "24.11";
+  home.stateVersion = "24.11";
 
   home.packages = with pkgs; [
     neovim
@@ -29,9 +29,9 @@
   ];
 
   home.sessionVariables = {
-    EDITOR  = "nvim";
+    EDITOR = "nvim";
     BROWSER = "firefox";
-    TERM    = "alacritty";
+    TERM = "alacritty";
   };
 
   programs.home-manager.enable = true;

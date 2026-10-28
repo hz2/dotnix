@@ -9,17 +9,17 @@
 
     settings = {
       "*" = {
-        AddKeysToAgent      = "yes";
-        ControlMaster       = "auto";
-        ControlPath         = "~/.ssh/sockets/%r@%h-%p";
-        ControlPersist      = "10m";
+        AddKeysToAgent = "yes";
+        ControlMaster = "auto";
+        ControlPath = "~/.ssh/sockets/%r@%h-%p";
+        ControlPersist = "10m";
         ServerAliveInterval = 60;
         ServerAliveCountMax = 3;
-        HashKnownHosts      = true;
+        HashKnownHosts = true;
       };
       "github.com" = {
-        Hostname     = "github.com";
-        User         = "git";
+        Hostname = "github.com";
+        User = "git";
         IdentityFile = "~/.ssh/id_ed25519";
       };
     };

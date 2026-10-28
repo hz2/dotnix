@@ -19,16 +19,16 @@
       channels.discord = {
         enabled = true;
         token = {
-          source   = "env";
+          source = "env";
           provider = "default";
-          id       = "DISCORD_BOT_TOKEN";
+          id = "DISCORD_BOT_TOKEN";
         };
       };
 
       models.providers.anthropic.apiKey = {
-        source   = "env";
+        source = "env";
         provider = "default";
-        id       = "ANTHROPIC_API_KEY";
+        id = "ANTHROPIC_API_KEY";
       };
     };
   };

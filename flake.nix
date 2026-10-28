@@ -1,8 +1,16 @@
 {
-  description = "jos NixOS config";
+  description = "dotnix: reusable nixos and home-manager modules, plus my hosts";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    flake-parts = {
+      url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -18,24 +26,14 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, determinate, agenix, nix-openclaw, ... }@inputs: {
-    nixosConfigurations.jos = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      specialArgs = { inherit inputs; };
-      modules = [
-        determinate.nixosModules.default
-        agenix.nixosModules.default
-        ./hosts/jos/default.nix
-        ./hosts/jos/hardware.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs        = true;
-          home-manager.useUserPackages      = true;
-          home-manager.extraSpecialArgs     = { inherit inputs; };
-          home-manager.backupFileExtension  = "bak";
-          home-manager.users.jos            = import ./home/jos.nix;
-        }
+  outputs =
+    inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
+      imports = [
+        inputs.treefmt-nix.flakeModule
+        ./parts/dev.nix
+        ./parts/nixos.nix
       ];
     };
-  };
 }

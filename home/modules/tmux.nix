@@ -26,7 +26,7 @@ let
     fi
   '';
 
-nix-status = pkgs.writeShellScript "tmux-nix-status" ''
+  nix-status = pkgs.writeShellScript "tmux-nix-status" ''
     if [ -n "$IN_NIX_SHELL" ]; then
       if [ -n "$name" ]; then
         echo "● $name"
@@ -105,14 +105,14 @@ nix-status = pkgs.writeShellScript "tmux-nix-status" ''
 in
 {
   programs.tmux = {
-    enable       = true;
-    prefix       = "C-a";
-    mouse        = true;
-    baseIndex    = 1;
-    escapeTime   = 0;
+    enable = true;
+    prefix = "C-a";
+    mouse = true;
+    baseIndex = 1;
+    escapeTime = 0;
     historyLimit = 50000;
-    keyMode      = "vi";
-    terminal     = "tmux-256color";
+    keyMode = "vi";
+    terminal = "tmux-256color";
 
     # resurrect + continuum restore pane layout/cwd/scrollback on restart, but do not resume a live agent process that was running in a pane
     plugins = [

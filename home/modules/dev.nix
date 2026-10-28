@@ -26,6 +26,6 @@
 
   home.sessionVariables = {
     RUSTUP_HOME = "$HOME/.rustup";
-    CARGO_HOME  = "$HOME/.cargo";
+    CARGO_HOME = "$HOME/.cargo";
   };
 }

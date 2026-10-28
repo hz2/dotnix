@@ -5,27 +5,27 @@
     enable = true;
 
     shellAliases = {
-      cat     = "bat";
-      grep    = "rg";
-      vim     = "nvim";
-      vi      = "nvim";
+      cat = "bat";
+      grep = "rg";
+      vim = "nvim";
+      vi = "nvim";
       clauded = "claude --dangerously-skip-permissions";
     };
 
     shellAbbrs = {
-      g   = "git";
-      gs  = "git status";
-      gd  = "git diff";
-      ga  = "git add";
-      gc  = "git commit";
-      gp  = "git push";
-      gl  = "git log --oneline --graph";
+      g = "git";
+      gs = "git status";
+      gd = "git diff";
+      ga = "git add";
+      gc = "git commit";
+      gp = "git push";
+      gl = "git log --oneline --graph";
       gco = "git checkout";
       gbr = "git branch";
-      t   = "tmux";
-      ta  = "tmux attach";
-      tn  = "tmux new -s";
-      tl  = "tmux ls";
+      t = "tmux";
+      ta = "tmux attach";
+      tn = "tmux new -s";
+      tl = "tmux ls";
     };
 
     shellInit = ''
