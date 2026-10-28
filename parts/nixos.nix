@@ -14,6 +14,7 @@ let
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = { inherit inputs self; };
           home-manager.backupFileExtension = "bak";
+          home-manager.sharedModules = [ self.homeModules.default ];
         }
         ../hosts/${name}/default.nix
       ];

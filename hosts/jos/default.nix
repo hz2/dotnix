@@ -10,7 +10,7 @@ in
 {
   imports = [ ./hardware.nix ];
 
-  home-manager.users.${user.name} = import ../../home/jos.nix;
+  home-manager.users.${user.name} = import ./home.nix;
 
   nixpkgs.overlays = [ inputs.nix-openclaw.overlays.default ];
 
