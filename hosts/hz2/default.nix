@@ -21,6 +21,10 @@ in
     user = {
       name = "hz2";
       email = "hz2@users.noreply.github.com";
+      # without this, a renamed/recreated user has no password at all (locked,
+      # not blank) and no rollback brings one back: generations don't version
+      # /etc/shadow. neededForUsers makes sops decrypt it before users activate.
+      hashedPasswordFile = lib.mkIf hasSecrets config.sops.secrets.hz2-hashed-password.path;
       # dialout: serial access to /dev/ttyACM* (flipper zero) without a manual
       # chmod every reconnect, see the udev rule below
       extraGroups = [
@@ -75,6 +79,9 @@ in
   sops.secrets = lib.mkIf hasSecrets {
     discord-bot-token.owner = user.name;
     anthropic-api-key.owner = user.name;
+    # neededForUsers secrets must be root-owned and decrypt before users
+    # activate, see modules/common/user.nix
+    hz2-hashed-password.neededForUsers = true;
   };
 
   boot.loader.systemd-boot.enable = true;

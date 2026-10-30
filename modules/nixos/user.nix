@@ -16,7 +16,7 @@ in
         users.users.${cfg.name} = {
           isNormalUser = true;
           home = cfg.homeDirectory;
-          inherit (cfg) shell extraGroups;
+          inherit (cfg) shell extraGroups hashedPasswordFile;
         };
       }
       # optionalAttrs, not mkIf: a mkIf still records the option path and fails

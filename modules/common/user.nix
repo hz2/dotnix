@@ -42,5 +42,18 @@ in
       default = [ ];
       description = "Supplementary groups of the primary user (nixos only).";
     };
+    hashedPasswordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Path to a file holding a crypted password hash (nixos only), usually
+        a sops-nix secret with `neededForUsers = true`. Without this, a
+        freshly declared or renamed user has no password at all: the account
+        is locked, not blank, and no password will log it in, including
+        after a rollback to an older generation that re-declares the same
+        user (generations don't version /etc/shadow). Set one on every real
+        host so console/rescue login always works.
+      '';
+    };
   };
 }

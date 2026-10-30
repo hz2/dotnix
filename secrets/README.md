@@ -22,10 +22,20 @@ and put the printed values in as:
 ```yaml
 discord-bot-token: <value>
 anthropic-api-key: <value>
+hz2-hashed-password: <value>
 ```
 
+`hz2-hashed-password` is a crypt(3) hash for console/rescue login, generated
+with `mkpasswd -m sha-512` (pick your own password, don't reuse another
+secret). Without it a freshly declared or renamed user has no password at
+all: the account is locked, not blank, and booting an older generation
+doesn't bring one back since generations don't version `/etc/shadow`.
+
 Commit `secrets/hz2.yaml` (it's ciphertext) and rebuild. They land in
-`/run/secrets/<name>`, owned by the user.
+`/run/secrets/<name>`, owned by the user; `hz2-hashed-password` lands in
+`/run/secrets-for-users/<name>` instead (`neededForUsers`, see
+`hosts/hz2/default.nix`) because it must decrypt before user accounts are
+created, not after.
 
 ## adding a recipient
 
