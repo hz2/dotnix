@@ -32,8 +32,7 @@
       url = "git+ssh://git@github.com/hz2/agents";
       flake = false;
     };
-    # verification skills from cursor/plugins; unlicensed, so fetched and pinned here
-    # for personal use instead of being copied into this repo
+    # upstream verification skills, pinned for reproducible installation
     cursor-plugins = {
       url = "github:cursor/plugins";
       flake = false;

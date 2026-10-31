@@ -224,8 +224,7 @@ let
     "codex skills land through the shared personal directory" =
       codex.home.file.".agents/skills/demo".source == ../config/skills/web-research;
     "codex skills use the shared personal directory" =
-      lib.elem ".agents/skills/demo" codexFiles
-      && !(lib.elem ".codex/skills/demo" codexFiles);
+      lib.elem ".agents/skills/demo" codexFiles && !(lib.elem ".codex/skills/demo" codexFiles);
     "codex leaves Home Manager skill installation empty" = codex.programs.codex.skills == { };
     "codex settings stay empty by default, so config.toml is left alone" =
       codex.programs.codex.settings == { };
