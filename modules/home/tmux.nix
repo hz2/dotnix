@@ -92,7 +92,7 @@ let
   sessionizer = pkgs.writeShellScript "tmux-sessionizer" ''
     selected=$(
       {
-        find "$HOME/srcs" -mindepth 1 -maxdepth 1 -type d 2>/dev/null
+        find "$HOME/src" -mindepth 1 -maxdepth 1 -type d 2>/dev/null
         find "$HOME/workspaces" -mindepth 1 -maxdepth 2 -type d -not -path '*/.*' 2>/dev/null
       } | ${pkgs.fzf}/bin/fzf
     )
@@ -150,7 +150,7 @@ in
 
         bind c new-window
 
-        # fzf across ~/srcs and ~/workspaces, then switch to (or create) a session per dir
+        # fzf across ~/src and ~/workspaces, then switch to (or create) a session per dir
         bind f display-popup -E "${sessionizer}"
 
         # broadcast input to every pane at once, for prompting several agent panes together

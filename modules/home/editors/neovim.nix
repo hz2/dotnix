@@ -14,7 +14,7 @@ in
     configPath = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
-      example = "/home/me/dotnix/config/nvim";
+      example = "/home/me/src/dotnix/config/nvim";
       description = ''
         Absolute path to a lua config checkout, linked out of the store so
         lazy.nvim can still write lazy-lock.json. Null leaves ~/.config/nvim alone.

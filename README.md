@@ -21,8 +21,8 @@ tests/             eval-only module checks
 ## Use
 
 ```bash
-sudo nixos-rebuild switch --flake ~/dotnix#hz2   # nixos host
-home-manager switch --flake ~/dotnix#hz2         # any linux box, home only
+sudo nixos-rebuild switch --flake ~/src/dotnix#hz2   # nixos host
+home-manager switch --flake ~/src/dotnix#hz2         # any linux box, home only
 nix flake check                                  # module tests, pre-commit hooks + builds every config
 nix fmt
 ```

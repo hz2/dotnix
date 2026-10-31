@@ -11,7 +11,7 @@ let
   llmAgents = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
 in
 {
-  # local llm tooling for the hive lab (~/srcs/hive)
+  # local llm tooling for the hive lab (~/src/hive)
   home.packages = [
     pkgs.python3Packages.huggingface-hub # hf cli
     pkgs.sops

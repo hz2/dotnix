@@ -49,7 +49,7 @@ in
           argparse 'r/repos=+' 'b/branch=' 'p/path=' -- $argv
           or return 1
 
-          set -l srcs ~/srcs
+          set -l srcs ~/src
 
           # collect repos from flag or fzf
           set -l repos
@@ -135,7 +135,7 @@ in
 
       functions.sync-repos = {
         body = ''
-          set -l srcs ~/srcs
+          set -l srcs ~/src
 
           # repos from args or fzf
           set -l repos $argv

@@ -5,7 +5,21 @@
     ./home/openclaw.nix
   ];
 
-  home.stateVersion = "24.11";
+  home = {
+    stateVersion = "24.11";
+
+    packages = [
+      pkgs.lazygit
+      pkgs.xdg-utils
+      pkgs.zoxide
+      pkgs.zotero
+    ];
+
+    sessionVariables = {
+      BROWSER = "firefox";
+      TERM = "alacritty";
+    };
+  };
 
   dotnix = {
     terminal = {
@@ -24,12 +38,6 @@
     git = {
       enable = true;
       editor = "hx";
-      sendEmail = {
-        # lkml patch submission; password lives in gnome-keyring
-        enable = true;
-        smtpUser = "hz2@users.noreply.github.com";
-        from = "hz2 <hz2@users.noreply.github.com>";
-      };
     };
     desktop.hyprland.enable = true;
     apps.latex.enable = true;
@@ -46,20 +54,8 @@
     # kept until helix muscle memory sticks
     editors.neovim = {
       enable = true;
-      configPath = "${config.home.homeDirectory}/dotnix/config/nvim";
+      configPath = "${config.home.homeDirectory}/src/dotnix/config/nvim";
     };
-  };
-
-  home.packages = [
-    pkgs.lazygit
-    pkgs.xdg-utils
-    pkgs.zoxide
-    pkgs.zotero
-  ];
-
-  home.sessionVariables = {
-    BROWSER = "firefox";
-    TERM = "alacritty";
   };
 
   programs.home-manager.enable = true;
