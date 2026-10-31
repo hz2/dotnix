@@ -3,11 +3,11 @@
     "agents": {
       "flake": false,
       "locked": {
-        "lastModified": 1793432671,
-        "narHash": "sha256-FNCbM2ybvHySxKQHzY6U0Htq8GI6AT//VuWhluG+zW0=",
+        "lastModified": 1793482830,
+        "narHash": "sha256-EQ3yh4IeGn7pXfF4uV9SbZR0h70ylaX2GHbngOLUpjA=",
         "ref": "refs/heads/main",
-        "rev": "1b342e289d0952f9701868c15ac3a0aeb093ac74",
-        "revCount": 1,
+        "rev": "e35bfe5b8a5ac93d5e5c633954412cb3daf96d48",
+        "revCount": 4,
         "type": "git",
         "url": "ssh://git@github.com/hz2/agents"
       },

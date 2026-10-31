@@ -53,6 +53,7 @@ in
         help-nix = "${inputs.agents}/skills/help-nix";
         help-rust = "${inputs.agents}/skills/help-rust";
         delegate = "${inputs.agents}/skills/delegate";
+        verification-gates = "${inputs.agents}/skills/verification-gates";
       }
       // lib.genAttrs [
         "principle-prove-it-works"
