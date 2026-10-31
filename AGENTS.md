@@ -46,3 +46,13 @@ and sets options.
 
 Comments lowercase, brief, and explain why. No em dashes, arrows, emoji or
 banner comments. Conventional commits, e.g. `feat(ai): ...`, `refactor(home): ...`.
+
+## Resource usage
+
+Default to low RAM/CPU footprint for agents, background services, and other
+long-running processes configured here, when a lower-footprint option exists
+without giving up what's needed. Favor lighter models, smaller worker/thread
+counts, and narrower scopes over defaults tuned for throughput. New modules
+should not contend with or degrade other agents/services running on the same
+machine (CPU, memory, disk IO, network) unless the user explicitly asks for
+that tradeoff.
