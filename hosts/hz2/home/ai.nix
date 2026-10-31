@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   inputs,
   ...
@@ -46,7 +47,17 @@ in
     skills = {
       enable = true;
       # claude code has its own web tools on this box
-      skills.web-research = null;
+      skills = {
+        web-research = null;
+      }
+      // lib.genAttrs [
+        "principle-prove-it-works"
+        "benchmark-checklist"
+        "create-verification-skill"
+        "maintain-verification-skill"
+        "create-formal-verification-skill"
+        "maintain-formal-verification-skill"
+      ] (name: "${inputs.cursor-plugins}/pstack/skills/${name}");
     };
     claude = {
       enable = true;

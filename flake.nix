@@ -27,6 +27,12 @@
     # daily builds of pi, claude-code and codex; not following nixpkgs keeps
     # their binary cache usable
     llm-agents.url = "github:numtide/llm-agents.nix";
+    # verification skills from cursor/plugins; unlicensed, so fetched and pinned here
+    # for personal use instead of being copied into this repo
+    cursor-plugins = {
+      url = "github:cursor/plugins";
+      flake = false;
+    };
     nix-openclaw = {
       url = "github:openclaw/nix-openclaw";
       inputs.home-manager.follows = "home-manager";

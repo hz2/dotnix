@@ -26,8 +26,10 @@ Secrets follow the repo rule: file paths or command strings only.
 
 ## 2. Skills and verification (issue #1)
 
-The `cursor/plugins` pstack skills in the issue have no license, so they are references, not
-something to copy into this public repo. Write our own, borrowing the ideas:
+The `cursor/plugins` pstack skills in the issue have no license, so they are not copied into this
+public repo. They are pinned as a non-flake input (`cursor-plugins`) and linked into the agents for
+personal use. The six installed skills are listed below; the rest of this section is what they do
+and what is worth borrowing if we later write our own:
 
 | idea | our skill | what it does |
 |---|---|---|
