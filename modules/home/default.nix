@@ -1,5 +1,6 @@
 {
   imports = [
+    ./ai/chatgpt.nix
     ./ai/claude.nix
     ./ai/codex.nix
     ./ai/mcp.nix

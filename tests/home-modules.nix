@@ -281,6 +281,10 @@ let
       firefoxPolicies.ExtensionSettings."uBlock0@raymondhill.net".install_url
       == "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
     "firefox telemetry off by default" = firefoxPolicies.DisableTelemetry;
+    "chatgpt app is installed when enabled" =
+      lib.elem chatgpt.dotnix.ai.chatgpt.package chatgpt.home.packages;
+    "chatgpt app is absent by default" =
+      !(lib.elem chatgptOff.dotnix.ai.chatgpt.package chatgptOff.home.packages);
   };
 
   firefox = hm {
@@ -295,6 +299,16 @@ let
   firefoxPolicies = firefox.programs.firefox.policies;
 
   firefoxOff = hm { };
+
+  chatgpt = hm {
+    dotnix.ai.chatgpt = {
+      enable = true;
+      package = pkgs.hello;
+    };
+  };
+  chatgptOff = hm {
+    dotnix.ai.chatgpt.package = pkgs.hello;
+  };
 
   failed = lib.attrNames (lib.filterAttrs (_: ok: !ok) checks);
 in
