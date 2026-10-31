@@ -11,14 +11,16 @@ let
         self.nixosModules.default
         { nixpkgs.overlays = [ self.overlays.default ]; }
         {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = { inherit inputs self; };
-          home-manager.backupFileExtension = "bak";
-          home-manager.sharedModules = [
-            inputs.sops-nix.homeManagerModules.sops
-            self.homeModules.default
-          ];
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            extraSpecialArgs = { inherit inputs self; };
+            backupFileExtension = "bak";
+            sharedModules = [
+              inputs.sops-nix.homeManagerModules.sops
+              self.homeModules.default
+            ];
+          };
         }
         ../hosts/${name}/default.nix
       ];

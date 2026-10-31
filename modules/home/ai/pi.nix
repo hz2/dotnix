@@ -56,7 +56,7 @@ let
           };
         };
         extraConfig = lib.mkOption {
-          type = json.type;
+          inherit (json) type;
           default = { };
           description = "Extra model fields merged verbatim, e.g. compat.";
         };
@@ -89,7 +89,7 @@ let
         description = "Models keyed by id.";
       };
       extraConfig = lib.mkOption {
-        type = json.type;
+        inherit (json) type;
         default = { };
         description = "Extra provider fields merged verbatim, e.g. headers or compat.";
       };

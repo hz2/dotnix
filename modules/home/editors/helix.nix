@@ -35,7 +35,7 @@ let
         description = "External formatter; null falls back to lsp formatting.";
       };
       extraConfig = lib.mkOption {
-        type = (pkgs.formats.toml { }).type;
+        inherit ((pkgs.formats.toml { })) type;
         default = { };
         description = "Extra languages.toml fields for this language.";
       };
@@ -240,7 +240,7 @@ in
       };
     };
     settings = lib.mkOption {
-      type = (pkgs.formats.toml { }).type;
+      inherit ((pkgs.formats.toml { })) type;
       default = { };
       description = "Merged over the dotnix defaults in config.toml.";
     };

@@ -35,7 +35,7 @@ in
       {
         programs.mcp = {
           enable = true;
-          servers = cfg.servers;
+          inherit (cfg) servers;
         };
       }
       (lib.optionalAttrs (options.programs ? claude-code) {

@@ -58,8 +58,10 @@ in
       ];
     };
 
-    security.polkit.enable = true;
-    security.pam.services.hyprlock = { };
-    security.pam.services.greetd.enableGnomeKeyring = true;
+    security = {
+      polkit.enable = true;
+      pam.services.hyprlock = { };
+      pam.services.greetd.enableGnomeKeyring = true;
+    };
   };
 }

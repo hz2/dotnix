@@ -28,7 +28,7 @@ in
     };
 
     settings = lib.mkOption {
-      type = tomlFormat.type;
+      inherit (tomlFormat) type;
       default = { };
       description = ''
         Extra programs.codex.settings. Empty by default so CODEX_HOME's
@@ -52,9 +52,7 @@ in
       {
         programs.codex = {
           enable = true;
-          package = cfg.package;
-          settings = cfg.settings;
-          mutableSettings = cfg.mutableSettings;
+          inherit (cfg) package settings mutableSettings;
           skills = lib.filterAttrs (_: v: v != null) cfg.skills;
         };
       }

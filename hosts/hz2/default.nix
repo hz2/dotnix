@@ -74,23 +74,29 @@ in
   # by default; decrypt with the personal key instead. secrets/hz2.yaml is
   # created separately, see secrets/README.md; evaluation must not fail
   # before it exists.
-  sops.age.sshKeyPaths = [ "${user.homeDirectory}/.ssh/id_ed25519" ];
-  sops.defaultSopsFile = secretsFile;
-  sops.secrets = lib.mkIf hasSecrets {
-    discord-bot-token.owner = user.name;
-    anthropic-api-key.owner = user.name;
-    # neededForUsers secrets must be root-owned and decrypt before users
-    # activate, see modules/common/user.nix
-    hz2-hashed-password.neededForUsers = true;
+  sops = {
+    age.sshKeyPaths = [ "${user.homeDirectory}/.ssh/id_ed25519" ];
+    defaultSopsFile = secretsFile;
+    secrets = lib.mkIf hasSecrets {
+      discord-bot-token.owner = user.name;
+      anthropic-api-key.owner = user.name;
+      # neededForUsers secrets must be root-owned and decrypt before users
+      # activate, see modules/common/user.nix
+      hz2-hashed-password.neededForUsers = true;
+    };
   };
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams = [ "i915.enable_psr=0" ];
+  boot = {
+    loader.systemd-boot.enable = true;
+    loader.efi.canTouchEfiVariables = true;
+    kernelParams = [ "i915.enable_psr=0" ];
+  };
 
-  networking.hostName = "hz2";
-  networking.networkmanager.enable = true;
-  networking.extraHosts = "192.168.1.20 nipogi";
+  networking = {
+    hostName = "hz2";
+    networkmanager.enable = true;
+    extraHosts = "192.168.1.20 nipogi";
+  };
 
   time.timeZone = "America/Los_Angeles";
   i18n.defaultLocale = "en_US.UTF-8";

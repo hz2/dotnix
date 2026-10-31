@@ -56,9 +56,7 @@ in
       {
         programs.claude-code = {
           enable = true;
-          package = cfg.package;
-          settings = cfg.settings;
-          mutableSettings = cfg.mutableSettings;
+          inherit (cfg) package settings mutableSettings;
           skills = lib.filterAttrs (_: v: v != null) cfg.skills;
         };
       }
