@@ -272,7 +272,29 @@ let
     "helix missing upstream servers trips assertion" = lib.any (lib.hasInfix "languageServers = null") (
       failedAssertions helixMissingUpstream
     );
+    "firefox is off by default" = !firefoxOff.programs.firefox.enable;
+    "firefox user settings override built-in defaults" =
+      firefoxProfile.settings."browser.startup.page" == 1
+      && firefoxProfile.settings."privacy.donottrackheader.enabled";
+    "firefox profile path adopts an existing directory" = firefoxProfile.path == "abc.default";
+    "firefox extension is force-installed by slug" =
+      firefoxPolicies.ExtensionSettings."uBlock0@raymondhill.net".install_url
+      == "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
+    "firefox telemetry off by default" = firefoxPolicies.DisableTelemetry;
   };
+
+  firefox = hm {
+    dotnix.apps.firefox = {
+      enable = true;
+      profile.path = "abc.default";
+      settings."browser.startup.page" = 1;
+      extensions."uBlock0@raymondhill.net" = "ublock-origin";
+    };
+  };
+  firefoxProfile = firefox.programs.firefox.profiles.default;
+  firefoxPolicies = firefox.programs.firefox.policies;
+
+  firefoxOff = hm { };
 
   failed = lib.attrNames (lib.filterAttrs (_: ok: !ok) checks);
 in

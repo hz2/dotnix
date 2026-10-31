@@ -129,7 +129,6 @@ in
     pkgs.tree
     pkgs.btop
     pkgs.docker
-    pkgs.firefox
     pkgs.brightnessctl
     pkgs.playerctl
     pkgs.blueman

@@ -41,6 +41,14 @@
     };
     desktop.hyprland.enable = true;
     apps.latex.enable = true;
+    apps.firefox = {
+      enable = true;
+      # adopt the profile firefox already created so logins and bookmarks stay
+      profile.path = "9ojaf2g8.default";
+      extensions = {
+        "uBlock0@raymondhill.net" = "ublock-origin";
+      };
+    };
     editors.helix = {
       enable = true;
       wordCompletion.enable = true;

@@ -13,6 +13,7 @@
     ./direnv.nix
     ./editors/helix.nix
     ./editors/neovim.nix
+    ./firefox.nix
     ./fish.nix
     ./git.nix
     ./hyprland.nix

@@ -25,6 +25,7 @@
     cli-tools = ../modules/home/cli-tools.nix;
     dev = ../modules/home/dev.nix;
     direnv = ../modules/home/direnv.nix;
+    firefox = ../modules/home/firefox.nix;
     fish = ../modules/home/fish.nix;
     git = ../modules/home/git.nix;
     helix = ../modules/home/editors/helix.nix;
