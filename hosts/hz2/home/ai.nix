@@ -63,12 +63,18 @@ in
     claude = {
       enable = true;
       # claude comes from its native self-updating installer; nix only manages
-      # skills, and settings.json stays whatever the cli writes there
+      # skills and vim mode; other settings stay under cli control
       package = null;
+      settings.editorMode = "vim";
+      settings.vimInsertModeRemaps.jj = "<Esc>";
+      settings.permissions.defaultMode = "default";
     };
     codex = {
       enable = true;
       package = llmAgents.codex;
+      settings.approval_policy = "on-request";
+      settings.sandbox_mode = "workspace-write";
+      settings.tui.vim_mode_default = true;
     };
     chatgpt = {
       enable = true;

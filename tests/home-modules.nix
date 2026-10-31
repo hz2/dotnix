@@ -115,6 +115,8 @@ let
   };
   codexFiles = lib.attrNames codex.home.file;
 
+  fish = hm { dotnix.shell.fish.enable = true; };
+
   mcpServers = {
     everything = {
       command = "npx";
@@ -228,6 +230,18 @@ let
       codex.programs.codex.settings == { };
     "codex writes no config.toml when settings stay empty" =
       !(lib.elem ".codex/config.toml" codexFiles);
+
+    "fish exposes claude bypass" =
+      fish.programs.fish.shellAliases.clauded == "claude --dangerously-skip-permissions";
+    "fish exposes codex bypass" =
+      fish.programs.fish.shellAliases.codexd == "codex --dangerously-bypass-approvals-and-sandbox";
+    "fish exposes named claude bypass" =
+      fish.programs.fish.shellAliases.claude-yolo == "claude --dangerously-skip-permissions";
+    "fish exposes named codex bypass" =
+      fish.programs.fish.shellAliases.codex-yolo == "codex --dangerously-bypass-approvals-and-sandbox";
+    "fish exposes sandboxed codex" =
+      fish.programs.fish.shellAliases.codex-sandbox
+      == "codex --sandbox workspace-write --ask-for-approval never";
 
     "mcp passes servers to programs.mcp" = mcp.programs.mcp.servers.everything.command == "npx";
     "mcp turns on claude integration by default" = mcp.programs.claude-code.enableMcpIntegration;
