@@ -50,10 +50,18 @@ in
     };
     claude = {
       enable = true;
+      codexDelegate.enable = true;
       # claude comes from its native self-updating installer; nix only manages
       # skills, and settings.json stays whatever the cli writes there
       package = null;
     };
-    codex.package = llmAgents.codex;
+    codex = {
+      enable = true;
+      package = llmAgents.codex;
+    };
+    chatgpt = {
+      enable = true;
+      package = llmAgents.chatgpt;
+    };
   };
 }

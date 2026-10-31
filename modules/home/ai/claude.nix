@@ -18,6 +18,8 @@ in
     enable = lib.mkEnableOption "Claude Code via home-manager's programs.claude-code";
     package = lib.mkPackageOption pkgs "claude-code" { nullable = true; };
 
+    codexDelegate.enable = lib.mkEnableOption "the codex-delegate skill, which hands bulk work to codex exec";
+
     skills = lib.mkOption {
       type = lib.types.attrsOf (lib.types.nullOr lib.types.path);
       default = { };
@@ -60,6 +62,9 @@ in
           skills = lib.filterAttrs (_: v: v != null) cfg.skills;
         };
       }
+      (lib.mkIf cfg.codexDelegate.enable {
+        dotnix.ai.claude.skills = lib.mkDefault { codex-delegate = ../../../config/skills/codex-delegate; };
+      })
       (lib.optionalAttrs skillsModuleLoaded {
         dotnix.ai.claude.skills = lib.mkDefault config.dotnix.ai.skills.skills;
         # avoid writing the same skills/<name> path twice: once as a raw
