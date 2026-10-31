@@ -27,6 +27,11 @@
     # daily builds of pi, claude-code and codex; not following nixpkgs keeps
     # their binary cache usable
     llm-agents.url = "github:numtide/llm-agents.nix";
+    # own skills, notes and tooling; private, so fetched over ssh
+    agents = {
+      url = "git+ssh://git@github.com/hz2/agents";
+      flake = false;
+    };
     # verification skills from cursor/plugins; unlicensed, so fetched and pinned here
     # for personal use instead of being copied into this repo
     cursor-plugins = {

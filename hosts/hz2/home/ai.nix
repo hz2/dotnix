@@ -49,6 +49,7 @@ in
       # claude code has its own web tools on this box
       skills = {
         web-research = null;
+        codex-delegate = "${inputs.agents}/skills/codex-delegate";
       }
       // lib.genAttrs [
         "principle-prove-it-works"
@@ -61,7 +62,6 @@ in
     };
     claude = {
       enable = true;
-      codexDelegate.enable = true;
       # claude comes from its native self-updating installer; nix only manages
       # skills, and settings.json stays whatever the cli writes there
       package = null;
