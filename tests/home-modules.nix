@@ -209,7 +209,7 @@ let
 
     "skills go to claude" = lib.elem ".claude/skills/demo" skillFiles;
     "skills go to pi" = lib.elem ".pi/agent/skills/demo" skillFiles;
-    "skills skip disabled codex" = !(lib.elem ".codex/skills/demo" skillFiles);
+    "skills skip disabled codex" = !(lib.elem ".agents/skills/demo" skillFiles);
     "skills skip opencode by default" = !(lib.elem ".config/opencode/skills/demo" skillFiles);
 
     "claude skills land through programs.claude-code" =
@@ -221,18 +221,20 @@ let
     "claude writes no settings.json when settings stay empty" =
       !(lib.elem "/home/test/.claude/settings.json" claudeFiles);
 
-    "codex skills land through programs.codex" =
-      codex.programs.codex.skills.demo == ../config/skills/web-research;
-    "codex turns off the raw skills.nix symlink once it owns skills" =
-      !codex.dotnix.ai.skills.targets.codex;
-    "codex writes its skill once, through programs.codex" = lib.elem ".codex/skills/demo" codexFiles;
+    "codex skills land through the shared personal directory" =
+      codex.home.file.".agents/skills/demo".source == ../config/skills/web-research;
+    "codex skills use the shared personal directory" =
+      lib.elem ".agents/skills/demo" codexFiles
+      && !(lib.elem ".codex/skills/demo" codexFiles);
+    "codex leaves Home Manager skill installation empty" = codex.programs.codex.skills == { };
     "codex settings stay empty by default, so config.toml is left alone" =
       codex.programs.codex.settings == { };
     "codex writes no config.toml when settings stay empty" =
       !(lib.elem ".codex/config.toml" codexFiles);
 
-    "fish exposes claude bypass" =
-      fish.programs.fish.shellAliases.clauded == "claude --dangerously-skip-permissions";
+    "fish exposes one named claude bypass" =
+      fish.programs.fish.shellAliases.claude-yolo == "claude --dangerously-skip-permissions"
+      && !(builtins.hasAttr "clauded" fish.programs.fish.shellAliases);
     "fish exposes codex bypass" =
       fish.programs.fish.shellAliases.codexd == "codex --dangerously-bypass-approvals-and-sandbox";
     "fish exposes named claude bypass" =

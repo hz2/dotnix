@@ -22,7 +22,7 @@ in
       description = ''
         Skills merged into programs.codex.skills. Defaults to
         dotnix.ai.skills.skills when dotnix.ai.skills is loaded, which also
-        turns off that module's own raw ~/.codex/skills symlinks. Null
+        turns off that module's own raw ~/.agents/skills symlinks. Null
         entries are dropped.
       '';
     };
@@ -57,10 +57,10 @@ in
         };
       }
       (lib.optionalAttrs skillsModuleLoaded {
-        dotnix.ai.codex.skills = lib.mkDefault config.dotnix.ai.skills.skills;
+        dotnix.ai.codex.skills = lib.mkDefault { };
         # avoid writing the same skills/<name> path twice: once as a raw
         # home.file symlink here, once through programs.codex.skills above
-        dotnix.ai.skills.targets.codex = lib.mkDefault false;
+        dotnix.ai.skills.targets.codex = lib.mkForce true;
       })
     ]
   );

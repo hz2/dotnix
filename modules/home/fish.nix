@@ -15,7 +15,6 @@ in
         grep = "rg";
         vim = "nvim";
         vi = "nvim";
-        clauded = "claude --dangerously-skip-permissions";
         codexd = "codex --dangerously-bypass-approvals-and-sandbox";
         claude-yolo = "claude --dangerously-skip-permissions";
         codex-yolo = "codex --dangerously-bypass-approvals-and-sandbox";

@@ -11,7 +11,7 @@ let
   dirs = {
     claude = ".claude/skills";
     pi = ".pi/agent/skills";
-    codex = ".codex/skills";
+    codex = ".agents/skills";
     opencode = ".config/opencode/skills";
   };
 

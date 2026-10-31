@@ -50,6 +50,9 @@ in
       skills = {
         web-research = null;
         codex-delegate = "${inputs.agents}/skills/codex-delegate";
+        help-nix = "${inputs.agents}/skills/help-nix";
+        help-rust = "${inputs.agents}/skills/help-rust";
+        delegate = "${inputs.agents}/skills/delegate";
       }
       // lib.genAttrs [
         "principle-prove-it-works"
